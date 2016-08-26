@@ -41,9 +41,6 @@ frappe.views.QueryReport = Class.extend({
 		this.wrapper = $("<div>").appendTo(this.page.main);
 		$('<div class="waiting-area" style="display: none;"></div>\
 		<div class="no-report-area msg-box no-border" style="display: none;"></div>\
-		<div style="border-bottom: 1px solid #d1d8dd; padding-bottom: 10px">\
-			<div class="chart_area"></div>\
-		</div>\
 		<div class="results" style="display: none;">\
 			<div class="result-area" style="height:400px;"></div>\
 			<p class="help-msg alert alert-warning text-center" style="margin: 15px; margin-top: 0px;"></p>\
@@ -51,6 +48,9 @@ frappe.views.QueryReport = Class.extend({
 				'+__('For comparative filters, start with')+' ">" or "<" or "!", e.g. >5 or >01-02-2012 or !0\
 				<br>'+__('For ranges')+' ('+__('values and dates')+') use ":", \
 					e.g. "5:10"  (' + __("to filter values between 5 & 10") + ')</p>\
+		</div>\
+		<div style="border-bottom: 1px solid #d1d8dd; border-top: 1px solid #d1d8dd; padding-bottom: 10px">\
+			<div class="chart_area"></div>\
 		</div>').appendTo(this.wrapper);
 
 		this.make_toolbar();
