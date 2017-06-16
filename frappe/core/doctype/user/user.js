@@ -20,7 +20,7 @@ frappe.ui.form.on('User', {
 
 	},
 	onload: function(frm) {
-		if(has_common(user_roles, ["Administrator", "System Manager", "SMCL Admin"]) && !frm.doc.__islocal) {
+		if(has_common(user_roles, ["Administrator", "System Manager", "Admin"]) && !frm.doc.__islocal) {
 			if(!frm.roles_editor) {
 				var role_area = $('<div style="min-height: 300px">')
 					.appendTo(frm.fields_dict.roles_html.wrapper);
@@ -55,7 +55,7 @@ frappe.ui.form.on('User', {
 				frappe.set_route("modules_setup");
 			}, null, "btn-default")
 
-			if(has_common(user_roles, ["Administrator", "System Manager"])) {
+			if(has_common(user_roles, ["Administrator", "System Manager", "Admin"])) {
 
 				frm.add_custom_button(__("Set User Permissions"), function() {
 					frappe.route_options = {
@@ -86,7 +86,7 @@ frappe.ui.form.on('User', {
 	},
 	enabled: function(frm) {
 		var doc = frm.doc;
-		if(!doc.__islocal && has_common(user_roles, ["Administrator", "System Manager"])) {
+		if(!doc.__islocal && has_common(user_roles, ["Administrator", "System Manager", "Admin"])) {
 			frm.toggle_display(['sb1', 'sb3', 'modules_access'], doc.enabled);
 			frm.set_df_property('enabled', 'read_only', 0);
 		}
