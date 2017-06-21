@@ -45,7 +45,9 @@ io.on('connection', function(socket){
 				return;
 			}
 			if(res.status == 200) {
+				console.log("Trying to Join room")
 				var room = get_user_room(socket, res.body.message.user);
+				console.log("DONEE to Join room")
 				// console.log('joining', room);
 				socket.join(room);
 				socket.join(get_site_room(socket));
