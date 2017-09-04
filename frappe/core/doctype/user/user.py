@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
-from frappe.utils import cint, has_gravatar, format_datetime, now_datetime, get_formatted_email
+from frappe.utils import cint, flt, has_gravatar, format_datetime, now_datetime, get_formatted_email
 from frappe import throw, msgprint, _
 from frappe.utils.password import update_password as _update_password
 from frappe.desk.notifications import clear_notifications
@@ -43,10 +43,17 @@ class User(Document):
 
 		self.in_insert = self.get("__islocal")
 
+		#Test password strength
+		if self.new_password:
+			from frappe.utils.password_strength import test_password_strength
+			result = test_password_strength(self.new_password)
+			if not flt(result['score']) > 3:
+				frappe.throw(str(result['feedback']['warning']) + "; " + str(result['feedback']['suggestions']))
+
 		# clear new password
 		self.__new_password = self.new_password
 		self.new_password = ""
-
+		
 		if self.name not in STANDARD_USERS:
 			self.validate_email_type(self.email)
 		self.add_system_manager_role()
@@ -451,6 +458,11 @@ def update_password(new_password, key=None, old_password=None):
 		return res['message']
 	else:
 		user = res['user']
+
+	from frappe.utils.password_strength import test_password_strength
+	result = test_password_strength(new_password)
+	if not flt(result['score']) > 3:
+		frappe.throw(str(result['feedback']['warning']) + "; " + str(result['feedback']['suggestions']))
 
 	_update_password(user, new_password)
 
