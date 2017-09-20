@@ -132,6 +132,12 @@ def evaluate_alert(doc, alert, event):
 			recipient.cc = recipient.cc.replace(",", "\n")
 			recipients = recipients + recipient.cc.split("\n")
 
+		if recipient.email_by_role:
+			emails = get_emails_from_role(recipient.email_by_role)
+			
+			for email in emails:
+				recipients = recipients + email.split("\n")
+
 	if not recipients:
 		return
 

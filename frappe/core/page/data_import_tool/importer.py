@@ -68,6 +68,7 @@ def upload(rows = None, submit_after_import=None, ignore_encoding_errors=False, 
 				# filter empty columns if they exist at the end
 				columns = columns[:-1*len(empty_cols)]
 			else:
+				frappe.msgprint(str(empty_cols))
 				frappe.msgprint(_("Please make sure that there are no empty columns in the file."),
 					raise_exception=1)
 
