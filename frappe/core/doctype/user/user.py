@@ -47,7 +47,7 @@ class User(Document):
 		if self.new_password:
 			from frappe.utils.password_strength import test_password_strength
 			result = test_password_strength(self.new_password)
-			if not flt(result['score']) > 3:
+			if not flt(result['score']) > 2:
 				frappe.throw(str(result['feedback']['warning']) + "; " + str(result['feedback']['suggestions']))
 
 		# clear new password
