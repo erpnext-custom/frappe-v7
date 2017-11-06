@@ -11,16 +11,21 @@ from frappe.modules import scrub, get_module_path
 from frappe.utils import flt, cint, get_html_format, cstr
 from frappe.translate import send_translations
 import frappe.desk.reportview
+from frappe.boot import get_allowed_reports 
 from frappe.permissions import get_role_permissions
 
 def get_report_doc(report_name):
-	doc = frappe.get_doc("Report", report_name)
-	if not doc.has_permission("read"):
-		frappe.throw(_("You don't have access to Report: {0}").format(report_name), frappe.PermissionError)
+	allowed_reports = get_allowed_reports()
+	if report_name not in allowed_reports:
+		frappe.throw("No Permission to view this report. Contact the System Administrator")
 
-	if not frappe.has_permission(doc.ref_doctype, "report"):
-		frappe.throw(_("You don't have permission to get a report on: {0}").format(doc.ref_doctype),
-			frappe.PermissionError)
+	doc = frappe.get_doc("Report", report_name)
+	#if not doc.has_permission("read"):
+	#	frappe.throw(_("You don't have access to Report: {0}").format(report_name), frappe.PermissionError)
+
+	#if not frappe.has_permission(doc.ref_doctype, "report"):
+	#	frappe.throw(_("You don't have permission to get a report on: {0}").format(doc.ref_doctype),
+	#		frappe.PermissionError)
 
 	if doc.disabled:
 		frappe.throw(_("Report {0} is disabled").format(report_name))
@@ -66,9 +71,9 @@ def run(report_name, filters=()):
 	if filters and isinstance(filters, basestring):
 		filters = json.loads(filters)
 
-	if not frappe.has_permission(report.ref_doctype, "report"):
-		frappe.msgprint(_("Must have report permission to access this report."),
-			raise_exception=True)
+	#if not frappe.has_permission(report.ref_doctype, "report"):
+	#	frappe.msgprint(_("Must have report permission to access this report."),
+	#		raise_exception=True)
 
 	columns, result, message, chart = [], [], None, {}
 	if report.report_type=="Query Report":

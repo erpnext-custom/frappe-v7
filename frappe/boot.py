@@ -79,6 +79,20 @@ def load_desktop_icons(bootinfo):
 	from frappe.desk.doctype.desktop_icon.desktop_icon import get_desktop_icons
 	bootinfo.desktop_icons = get_desktop_icons()
 
+def get_allowed_reports():
+	roles = frappe.get_roles()
+	report_info = {}
+
+	for r in frappe.db.sql("""select distinct
+		tabReport.name, tabReport.modified, tabReport.report_name
+		from `tabReport Role`, `tabReport`
+		where `tabReport Role`.role in (%s)
+			and `tabReport Role`.parent = `tabReport`.name""" %', '.join(['%s']*len(roles)),
+				roles, as_dict=True):
+		report_info[r.name] = {"modified":r.modified, "title":r.report_name}
+
+	return report_info
+
 def get_allowed_pages():
 	roles = frappe.get_roles()
 	page_info = {}
