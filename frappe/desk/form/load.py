@@ -120,6 +120,7 @@ def get_communications(doctype, name, start=0, limit=20):
 	if not doc.has_permission("read"):
 		raise frappe.PermissionError
 
+	frappe.msgprint("INSIDE")
 	return _get_communications(doctype, name, start, limit)
 
 
@@ -135,7 +136,7 @@ def _get_communications(doctype, name, start=0, limit=20):
 
 		elif c.communication_type=="Comment" and c.comment_type=="Comment":
 			c.content = frappe.utils.markdown(c.content)
-
+	#frappe.msgprint(str(communications))
 	return communications
 
 def get_communication_data(doctype, name, start=0, limit=20, after=None, fields=None,
