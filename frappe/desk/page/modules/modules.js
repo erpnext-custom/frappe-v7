@@ -91,7 +91,6 @@ frappe.pages['modules'].on_page_load = function(wrapper) {
 	}
 
 	var process_data = function(module_name, data) {
-		console.log(data)
 		frappe.module_links[module_name] = [];
 		data.forEach(function(section) {
 			section.items.forEach(function(item) {

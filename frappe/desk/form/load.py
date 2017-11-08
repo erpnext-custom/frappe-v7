@@ -94,6 +94,7 @@ def get_docinfo(doc=None, doctype=None, name=None):
 	frappe.response["docinfo"] = {
 		"attachments": get_attachments(doc.doctype, doc.name),
 		"communications": _get_communications(doc.doctype, doc.name),
+		'versions': get_versions(doc),
 		"assignments": get_assignments(doc.doctype, doc.name),
 		"permissions": get_doc_permissions(doc),
 		"shared": frappe.share.get_users(doc.doctype, doc.name,
@@ -114,13 +115,15 @@ def get_attachments(dt, dn):
 	return frappe.get_all("File", fields=["name", "file_name", "file_url", "is_private"],
 		filters = {"attached_to_name": dn, "attached_to_doctype": dt})
 
+def get_versions(doc):
+	return frappe.get_all('Version', filters=dict(ref_doctype=doc.doctype, docname=doc.name),
+		fields=['name', 'owner', 'creation', 'data'], limit=10, order_by='creation desc')
+
 @frappe.whitelist()
 def get_communications(doctype, name, start=0, limit=20):
 	doc = frappe.get_doc(doctype, name)
 	if not doc.has_permission("read"):
 		raise frappe.PermissionError
-
-	frappe.msgprint("INSIDE")
 	return _get_communications(doctype, name, start, limit)
 
 
@@ -172,7 +175,6 @@ def get_communication_data(doctype, name, start=0, limit=20, after=None, fields=
 			fields = fields, conditions=conditions, group_by=group_by or ""),
 			{ "doctype": doctype, "name": name, "start": frappe.utils.cint(start), "limit": limit },
 			as_dict=as_dict)
-
 	return communications
 
 def get_assignments(dt, dn):

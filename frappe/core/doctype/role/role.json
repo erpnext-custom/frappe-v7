@@ -1,6 +1,6 @@
 {
  "allow_copy": 0, 
- "allow_import": 0, 
+ "allow_import": 1, 
  "allow_rename": 1, 
  "autoname": "field:role_name", 
  "beta": 0, 
@@ -74,7 +74,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2017-02-03 16:53:44.510739", 
+ "modified": "2017-11-07 20:33:52.487516", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "Role", 
@@ -114,7 +114,7 @@
    "print": 1, 
    "read": 1, 
    "report": 1, 
-   "role": "SMCL Admin", 
+   "role": "Admin", 
    "set_user_permissions": 0, 
    "share": 1, 
    "submit": 0, 
@@ -165,5 +165,6 @@
  "read_only": 0, 
  "read_only_onload": 0, 
  "sort_order": "ASC", 
+ "track_changes": 0, 
  "track_seen": 0
 }

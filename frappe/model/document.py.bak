@@ -241,7 +241,7 @@ class Document(BaseDocument):
 		"""Wrapper for _save"""
 		return self._save(*args, **kwargs)
 
-	def _save(self, ignore_permissions=None, ignore_version=None):
+	def _save(self, ignore_permissions=None):
 		"""Save the current document in the database in the **DocType**'s table or
 		`tabSingles` (for single types).
 
@@ -254,9 +254,6 @@ class Document(BaseDocument):
 
 		if ignore_permissions!=None:
 			self.flags.ignore_permissions = ignore_permissions
-
-		if ignore_version!=None:
-			self.flags.ignore_version = ignore_version
 
 		if self.get("__islocal") or not self.get("name"):
 			self.insert()
@@ -322,11 +319,6 @@ class Document(BaseDocument):
 			frappe.db.sql("""delete from `tab{0}` where parent=%s
 				and parenttype=%s and parentfield=%s""".format(df.options),
 				(self.name, self.doctype, fieldname))
-
-	def get_doc_before_save(self):
-		if not getattr(self, '_doc_before_save', None):
-			self._doc_before_save = frappe.get_doc(self.doctype, self.name)
-		return self._doc_before_save
 
 	def set_new_name(self):
 		"""Calls `frappe.naming.se_new_name` for parent and child docs."""
@@ -713,9 +705,6 @@ class Document(BaseDocument):
 
 		if self.flags.ignore_validate:
 			return
-		self._doc_before_save = None
-		if not self.is_new() and getattr(self.meta, 'track_changes', False):
-			self.get_doc_before_save()
 
 		if self._action=="save":
 			self.run_method("validate")
@@ -740,13 +729,13 @@ class Document(BaseDocument):
 		elif self._action=="submit":
 			self.run_method("on_update")
 			self.run_method("on_submit")
-			#if not self.flags.ignore_submit_comment:
-			#	self.add_comment("Submitted")
+			if not self.flags.ignore_submit_comment:
+				self.add_comment("Submitted")
 		elif self._action=="cancel":
 			self.run_method("on_cancel")
 			self.check_no_back_links_exist()
-			#if not self.flags.ignore_submit_comment:
-			#	self.add_comment("Cancelled")
+			if not self.flags.ignore_submit_comment:
+				self.add_comment("Cancelled")
 		elif self._action=="update_after_submit":
 			self.run_method("on_update_after_submit")
 
@@ -755,11 +744,6 @@ class Document(BaseDocument):
 		self.update_timeline_doc()
 		self.clear_cache()
 		self.notify_update()
-
-		if not getattr(self, '_doc_before_save', None):
-			self._doc_before_save = None
-		if self._doc_before_save and not self.flags.ignore_version:
-			self.save_version()
 
 		if (self.doctype, self.name) in frappe.flags.currently_saving:
 			frappe.flags.currently_saving.remove((self.doctype, self.name))
@@ -811,12 +795,6 @@ class Document(BaseDocument):
 		if not self.flags.ignore_links:
 			check_if_doc_is_linked(self, method="Cancel")
 			check_if_doc_is_dynamically_linked(self, method="Cancel")
-
-	def save_version(self):
-		'''Save version info'''
-		version = frappe.new_doc('Version')
-		if version.set_diff(self._doc_before_save, self):
-			version.insert(ignore_permissions=True)
 
 	@staticmethod
 	def whitelist(f):
@@ -923,30 +901,19 @@ class Document(BaseDocument):
 		"""Add a comment to this document.
 
 		:param comment_type: e.g. `Comment`. See Communication for more info."""
-		
-		if comment_type=='Comment':
-			out = frappe.get_doc({
-				"doctype":"Communication",
-				"communication_type": "Comment",
-				"sender": comment_by or frappe.session.user,
-				"comment_type": comment_type,
-				"reference_doctype": self.doctype,
-				"reference_name": self.name,
-				"content": text or comment_type,
-				"link_doctype": link_doctype,
-				"link_name": link_name
-			}).insert(ignore_permissions=True)
-		else:
-			out = frappe.get_doc(dict(
-				doctype='Version',
-				ref_doctype= self.doctype,
-				docname= self.name,
-				data = frappe.as_json(dict(comment_type=comment_type, comment=text))
-			))
-			if comment_by:
-				out.owner = comment_by
-			out.insert(ignore_permissions=True)
-		return out
+
+		comment = frappe.get_doc({
+			"doctype":"Communication",
+			"communication_type": "Comment",
+			"sender": comment_by or frappe.session.user,
+			"comment_type": comment_type,
+			"reference_doctype": self.doctype,
+			"reference_name": self.name,
+			"content": text or comment_type,
+			"link_doctype": link_doctype,
+			"link_name": link_name
+		}).insert(ignore_permissions=True)
+		return comment
 
 	def add_seen(self, user=None):
 		'''add the given/current user to list of users who have seen this document (_seen)'''
