@@ -347,6 +347,8 @@ class DatabaseQuery(object):
 
 		self.shared = frappe.share.get_shared(self.doctype, self.user)
 
+		if ("Management" in frappe.get_roles(frappe.session.user)):
+			self.flags.ignore_permissions=True
 		if not meta.istable and not role_permissions.get("read") and not self.flags.ignore_permissions:
 			only_if_shared = True
 			if not self.shared:

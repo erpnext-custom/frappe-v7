@@ -58,7 +58,9 @@ frappe.workflow = {
 
 			var allow_edit = state ? frappe.workflow.get_document_state(doctype, state).allow_edit : null;
 
+			console.log(allow_edit + " ==> " + user_roles)
 			if(user_roles.indexOf(allow_edit)==-1) {
+				console.log("IS_READ_ONLY")
 				return true;
 			}
 		}

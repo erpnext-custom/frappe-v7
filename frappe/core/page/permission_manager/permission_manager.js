@@ -127,6 +127,7 @@ frappe.PermissionEngine = Class.extend({
 		return this.doctype_select.get(0).selectedIndex==0 ? null : doctype;
 	},
 	get_role: function() {
+		console.log("INSIDEE")
 		var role = this.role_select.val();
 		return this.role_select.get(0).selectedIndex==0 ? null : role;
 	},

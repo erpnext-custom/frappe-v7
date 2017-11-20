@@ -87,7 +87,7 @@ def search_widget(doctype, txt, query=None, searchfield=None, start=0,
 				or_filters = or_filters, limit_start = start,
 				limit_page_length=page_len,
 				order_by="if(_relevance, _relevance, 99999), idx desc, modified desc".format(doctype),
-				ignore_permissions = True if doctype == "DocType" else False, # for dynamic links
+				ignore_permissions = True, # if doctype == "DocType" else False, # for dynamic links
 				as_list=not as_dict)
 
 			# remove _relevance from results

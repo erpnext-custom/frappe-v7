@@ -942,7 +942,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2017-09-01 15:43:49.721001", 
+ "modified": "2017-11-09 18:23:58.907342", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "Communication", 
@@ -973,7 +973,7 @@
    "apply_user_permissions": 0, 
    "cancel": 0, 
    "create": 1, 
-   "delete": 1, 
+   "delete": 0, 
    "email": 0, 
    "export": 0, 
    "if_owner": 1, 
@@ -986,7 +986,7 @@
    "set_user_permissions": 0, 
    "share": 0, 
    "submit": 0, 
-   "write": 1
+   "write": 0
   }, 
   {
    "amend": 0, 
@@ -1015,5 +1015,6 @@
  "search_fields": "subject", 
  "sort_order": "DESC", 
  "title_field": "subject", 
+ "track_changes": 0, 
  "track_seen": 0
 }
