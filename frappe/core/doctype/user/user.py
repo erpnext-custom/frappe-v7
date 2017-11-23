@@ -97,7 +97,6 @@ class User(Document):
 			frappe.local.login_manager.logout(user=self.name)
 
 	def add_system_manager_role(self):
-		# if adding system manager, do nothing
 		if not cint(self.enabled) or ("System Manager" in [user_role.role for user_role in
 				self.get("user_roles")]):
 			return
@@ -315,7 +314,10 @@ class User(Document):
 	def append_roles(self, *roles):
 		"""Add roles to user"""
 		current_roles = [d.role for d in self.get("user_roles")]
+		frappe.msgprint(str(current_roles))
 		for role in roles:
+			if role == "System Manager" and frappe.session.user != "Administrator":
+				frappe.msgprint("NON-ADMIN ASSING")
 			if role in current_roles:
 				continue
 			self.append("user_roles", {"role": role})
@@ -336,6 +338,11 @@ class User(Document):
 	def remove_all_roles_for_guest(self):
 		if self.name == "Guest":
 			self.set("user_roles", list(set(d for d in self.get("user_roles") if d.role == "Guest")))
+		rol = frappe.db.get_value("UserRole", {"parent": self.name, "role": "System Manager"}, "role")
+		
+		#Allow only administrator to set System Manager
+		if frappe.session.user != "Administrator" and not rol:
+			self.set("user_roles", list(set(d for d in self.get("user_roles") if d.role != "System Manager")))
 
 	def remove_disabled_roles(self):
 		disabled_roles = [d.name for d in frappe.get_all("Role", filters={"disabled":1})]

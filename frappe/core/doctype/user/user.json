@@ -1546,8 +1546,8 @@
  "istable": 0, 
  "max_attachments": 5, 
  "menu_index": 0, 
- "modified": "2017-09-28 12:27:49.571560", 
- "modified_by": "sonam.zangmo@bt.bt", 
+ "modified": "2017-11-23 19:22:35.440517", 
+ "modified_by": "Administrator", 
  "module": "Core", 
  "name": "User", 
  "owner": "Administrator", 
@@ -1597,7 +1597,7 @@
    "apply_user_permissions": 0, 
    "cancel": 0, 
    "create": 1, 
-   "delete": 1, 
+   "delete": 0, 
    "email": 1, 
    "export": 1, 
    "if_owner": 0, 
@@ -1659,5 +1659,6 @@
  "search_fields": "full_name", 
  "sort_order": "DESC", 
  "title_field": "full_name", 
+ "track_changes": 1, 
  "track_seen": 0
 }
