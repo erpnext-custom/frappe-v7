@@ -314,10 +314,7 @@ class User(Document):
 	def append_roles(self, *roles):
 		"""Add roles to user"""
 		current_roles = [d.role for d in self.get("user_roles")]
-		frappe.msgprint(str(current_roles))
 		for role in roles:
-			if role == "System Manager" and frappe.session.user != "Administrator":
-				frappe.msgprint("NON-ADMIN ASSING")
 			if role in current_roles:
 				continue
 			self.append("user_roles", {"role": role})
