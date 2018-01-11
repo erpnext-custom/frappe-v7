@@ -177,6 +177,14 @@ frappe.ui.form.Toolbar = Class.extend({
 				frappe.new_doc(me.frm.doctype, true);}, true);
 		}
 
+		if(cint(me.frm.doc.docstatus) == 0 && is_submittable) {
+			this.page.add_menu_item(__('Cancel Document'), function() {
+				frappe.confirm("Do you really want to <b>Cancel</b> this document?", function() {
+					frappe.cancel_draft_doc(me.frm.doctype, me.frm.docname);
+				});
+			}, true)
+		}
+
 	},
 	can_save: function() {
 		return this.get_docstatus()===0;
