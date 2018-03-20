@@ -439,6 +439,7 @@ class DatabaseQuery(object):
 		meta = frappe.get_meta(self.doctype)
 		if self.order_by:
 			args.order_by = self.order_by
+			#frappe.msgprint(_("Test {0}").format(args.order_by))
 		else:
 			args.order_by = ""
 
@@ -468,6 +469,9 @@ class DatabaseQuery(object):
 				# draft docs always on top
 				if meta.is_submittable:
 					args.order_by = "`tab{0}`.docstatus asc, {1}".format(self.doctype, args.order_by)
+
+		# Following line added by SHIV on 2018/01/26
+		#frappe.msgprint(_("{0}").format(args.order_by))
 
 	def check_sort_by_table(self, order_by):
 		if "." in order_by:

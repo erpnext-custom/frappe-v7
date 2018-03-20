@@ -586,7 +586,9 @@ _f.Frm.prototype.cleanup_refresh = function() {
 	}
 
 	if(me.meta.autoname=="naming_series:" && !me.doc.__islocal) {
-		me.toggle_display("naming_series", false);
+		if(me.doc.doctype != "Journal Entry") {
+			me.toggle_display("naming_series", false);
+		}
 	}
 }
 

@@ -32,8 +32,9 @@ def getdoc(doctype, name, user=None):
 		doc = frappe.get_doc(doctype, name)
 		run_onload(doc)
 
-		if not doc.has_permission("read"):
-			raise frappe.PermissionError, ("read", doctype, name)
+		### Temp removed to allow get_doc in filter reports ##
+		#if not doc.has_permission("read"):
+		#      	raise frappe.PermissionError, ("read", doctype, name)
 
 		doc.apply_fieldlevel_read_permissions()
 

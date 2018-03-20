@@ -119,12 +119,12 @@ def get_eta(from_time, percent_complete):
 	return str(datetime.timedelta(seconds=(100 - percent_complete) / percent_complete * diff))
 
 def _get_time_zone():
-	return frappe.db.get_system_setting('time_zone') or 'Asia/Kolkata'
+	return frappe.db.get_system_setting('time_zone') or 'Asia/Thimphu'
 
 def get_time_zone():
 	if frappe.local.flags.in_test:
 		return _get_time_zone()
-
+	
 	return frappe.cache().get_value("time_zone", _get_time_zone)
 
 def convert_utc_to_user_timezone(utc_timestamp):

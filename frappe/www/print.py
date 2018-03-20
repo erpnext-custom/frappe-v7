@@ -1,5 +1,12 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # MIT License. See license.txt
+'''
+--------------------------------------------------------------------------------------------------------------------------
+Version          Author          CreatedOn          ModifiedOn          Remarks
+------------ --------------- ------------------ -------------------  -----------------------------------------------------
+2.0		  SHIV		                   21/12/2017         Dynamic letter_head fetching based on branch added 
+--------------------------------------------------------------------------------------------------------------------------                                                                          
+'''
 
 from __future__ import unicode_literals
 
@@ -185,7 +192,14 @@ def validate_print_permission(doc):
 def get_letter_head(doc, no_letterhead):
 	if no_letterhead:
 		return {}
-	if doc.get("letter_head"):
+	
+	if doc.get("branch"):
+                # Branch condition added by SHIV on 21/12/2017
+                lh = frappe.db.get_value("Branch", doc.branch, "letter_head")
+                if lh:
+                        return frappe.db.get_value("Letter Head", lh, ["content", "footer"], as_dict=True)
+                
+        if doc.get("letter_head"):
 		return frappe.db.get_value("Letter Head", doc.letter_head, ["content", "footer"], as_dict=True)
 	else:
 		return frappe.db.get_value("Letter Head", {"is_default": 1}, ["content", "footer"], as_dict=True) or {}
