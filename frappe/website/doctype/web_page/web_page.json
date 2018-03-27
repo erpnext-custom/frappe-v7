@@ -618,7 +618,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 20, 
- "modified": "2017-09-01 14:40:59.391282", 
+ "modified": "2018-03-26 15:36:22.106889", 
  "modified_by": "Administrator", 
  "module": "Website", 
  "name": "Web Page", 
@@ -642,6 +642,27 @@
    "set_user_permissions": 0, 
    "share": 1, 
    "submit": 0, 
+   "write": 1
+  }, 
+  {
+   "amend": 0, 
+   "apply_user_permissions": 1, 
+   "cancel": 0, 
+   "create": 1, 
+   "delete": 0, 
+   "email": 1, 
+   "export": 1, 
+   "if_owner": 0, 
+   "import": 0, 
+   "permlevel": 0, 
+   "print": 1, 
+   "read": 1, 
+   "report": 1, 
+   "role": "Admin", 
+   "set_user_permissions": 0, 
+   "share": 1, 
+   "submit": 0, 
+   "user_permission_doctypes": "[\"Web Page\"]", 
    "write": 1
   }, 
   {
@@ -671,5 +692,6 @@
  "search_fields": "title", 
  "sort_order": "ASC", 
  "title_field": "title", 
+ "track_changes": 0, 
  "track_seen": 0
 }
