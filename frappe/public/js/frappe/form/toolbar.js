@@ -180,7 +180,16 @@ frappe.ui.form.Toolbar = Class.extend({
 		if(cint(me.frm.doc.docstatus) == 0 && is_submittable) {
 			this.page.add_menu_item(__('Cancel Document'), function() {
 				frappe.confirm("Do you really want to <b>Cancel</b> this document?", function() {
-					frappe.cancel_draft_doc(me.frm.doctype, me.frm.docname);
+					frappe.call({
+						method: "erpnext.custom_utils.cancel_draft_doc",
+						args: {
+							"doctype": me.frm.doctype,
+							"docname": me.frm.docname
+						},
+						callback: function(r) {
+							me.frm.reload_doc()	
+						}
+					})
 				});
 			}, true)
 		}

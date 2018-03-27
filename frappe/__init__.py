@@ -1249,7 +1249,4 @@ def get_desk_link(doctype, name):
 def bold(text):
 	return '<b>{0}</b>'.format(text)
 
-def cancel_draft_doc(doctype, docname):
-	doc = frappe.get_doc(doctype, docname)
-	doc.db_set("docstatus", 2)
 
