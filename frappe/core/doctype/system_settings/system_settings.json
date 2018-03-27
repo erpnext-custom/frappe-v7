@@ -337,7 +337,7 @@
    "collapsible": 0, 
    "fieldname": "scheduler_last_event", 
    "fieldtype": "Data", 
-   "hidden": 1, 
+   "hidden": 0, 
    "ignore_user_permissions": 0, 
    "ignore_xss_filter": 0, 
    "in_filter": 0, 
@@ -622,7 +622,7 @@
  "issingle": 1, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2017-09-01 15:19:24.712760", 
+ "modified": "2017-12-29 17:02:54.936984", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "System Settings", 
@@ -674,5 +674,6 @@
  "read_only": 0, 
  "read_only_onload": 0, 
  "sort_order": "ASC", 
+ "track_changes": 0, 
  "track_seen": 0
 }

@@ -393,7 +393,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2017-11-17 22:45:35.412427", 
+ "modified": "2018-03-27 11:17:57.323025", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "Report", 
@@ -413,11 +413,11 @@
    "print": 1, 
    "read": 1, 
    "report": 1, 
-   "role": "Sales User", 
+   "role": "Admin", 
    "set_user_permissions": 0, 
    "share": 1, 
    "submit": 0, 
-   "write": 0
+   "write": 1
   }, 
   {
    "amend": 0, 

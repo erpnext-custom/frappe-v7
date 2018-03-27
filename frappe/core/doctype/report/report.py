@@ -23,7 +23,7 @@ class Report(Document):
 		if self.is_standard == "No" and frappe.db.get_value("Report", self.name, "is_standard") == "Yes":
 			frappe.throw(_("Cannot edit a standard report. Please duplicate and create a new report"))
 
-		if self.is_standard == "Yes" and frappe.session.user!="Administrator":
+		if self.is_standard == "Yes" and (frappe.session.user!="Administrator" and not any("Admin" for role in frappe.get_roles(frappe.session.user))):
 			frappe.throw(_("Only Administrator can save a standard report. Please rename and save."))
 
 		if self.report_type in ("Query Report", "Script Report") \
@@ -33,6 +33,12 @@ class Report(Document):
 	def on_update(self):
 		self.export_doc()
 
+	def check_role(key, lists):
+		for a in lists:
+			if a == key:
+				return True
+		return False
+	
 	def export_doc(self):
 		if frappe.flags.in_import:
 			return

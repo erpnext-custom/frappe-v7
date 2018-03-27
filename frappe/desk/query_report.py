@@ -158,7 +158,7 @@ def add_total_row(result, columns):
 			total_row[0] = _("Total")
 
 	# Following line added by SHIV on 2018/01/26
-        result = list(result)
+	result = list(result)
 
 	result.append(total_row)
 	return result

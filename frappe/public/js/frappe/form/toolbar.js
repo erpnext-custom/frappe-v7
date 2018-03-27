@@ -176,6 +176,23 @@ frappe.ui.form.Toolbar = Class.extend({
 			this.page.add_menu_item(__("New {0} (Ctrl+B)", [__(me.frm.doctype)]), function() {
 				frappe.new_doc(me.frm.doctype, true);}, true);
 		}
+		
+		if(cint(me.frm.doc.docstatus) == 0 && is_submittable) {
+                        this.page.add_menu_item(__('Cancel Document'), function() {
+                                frappe.confirm("Do you really want to <b>Cancel</b> this document?", function() {
+                                        frappe.call({
+                                                method: "erpnext.custom_utils.cancel_draft_doc",
+                                                args: {
+                                                        "doctype": me.frm.doctype,
+                                                        "docname": me.frm.docname
+                                                },
+                                                callback: function(r) {
+                                                        me.frm.reload_doc()
+                                                }
+                                        })
+                                });
+                        }, true)
+                }
 
 		if(cint(me.frm.doc.docstatus) == 0 && is_submittable) {
 			this.page.add_menu_item(__('Cancel Document'), function() {

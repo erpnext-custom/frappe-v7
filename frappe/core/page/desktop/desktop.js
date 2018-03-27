@@ -46,6 +46,21 @@ $.extend(frappe.desktop, {
 
 		all_icons.push(explore_icon);
 
+		var manual_icon = {
+			module_name: 'User Manual',
+			label: 'User Manual',
+			_label: __('User Manual'),
+			_id: 'User Manual',
+			_doctype: '',
+			icon: 'octicon octicon-telescope',
+			color: '#7578f6',
+			type: 'page',
+			link: '/manual'
+		};
+		manual_icon.app_icon = frappe.ui.app_icon.get_html(manual_icon);
+
+		all_icons.push(manual_icon);
+
 		frappe.desktop.wrapper.html(frappe.render_template(template, {
 			// all visible icons
 			desktop_items: all_icons,
