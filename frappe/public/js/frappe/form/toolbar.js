@@ -112,12 +112,12 @@ frappe.ui.form.Toolbar = Class.extend({
 		if(!is_submittable || docstatus == 1  ||
 			(allow_print_for_cancelled && docstatus == 2)||
 	 		(allow_print_for_draft && docstatus == 0)) {
-			if(frappe.model.can_print(null, me.frm)) {
+			/*TEMP SOLUTION TO ALLOW PRINTif(frappe.model.can_print(null, me.frm)) { */
 				this.page.add_menu_item(__("Print"), function() {
 					me.frm.print_doc();}, true);
 				this.print_icon = this.page.add_action_icon("icon-print", function() {
 					me.frm.print_doc();});
-			}
+			//}
 		}
 
 		// email

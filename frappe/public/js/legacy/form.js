@@ -170,8 +170,8 @@ _f.Frm.prototype.print_doc = function() {
 		return;
 	}
 	if(!frappe.model.can_print(this.doc.doctype, this)) {
-		msgprint(__("You are not allowed to print this document"));
-		return;
+		/**** TEMP SOLUTON TO ALLOW PRINT msgprint(__("You are not allowed to print this document"));
+		return; ****/
 	}
 
 	this.print_preview.refresh_print_options().trigger("change");
