@@ -92,6 +92,7 @@ def trigger_email_alerts(doc, method=None):
 			"on_update": "Save",
 			"after_insert": "New",
 			"validate": "Value Change",
+			"on_update_after_submit": "Value Change After Submit",
 			"on_submit": "Submit",
 			"on_cancel": "Cancel",
 		}[method]

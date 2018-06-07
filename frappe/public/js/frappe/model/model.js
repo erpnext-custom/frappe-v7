@@ -83,6 +83,7 @@ $.extend(frappe.model, {
 	},
 
 	with_doctype: function(doctype, callback, async) {
+		if(doctype == "Receive POL") { doctype = "POL"}
 		if(locals.DocType[doctype]) {
 			callback && callback();
 		} else {
@@ -143,6 +144,7 @@ $.extend(frappe.model, {
 	},
 
 	with_doc: function(doctype, name, callback) {
+		if(doctype == "Receive POL") { doctype = "POL"}
 		if(!name) name = doctype; // single type
 		if(locals[doctype] && locals[doctype][name] && frappe.model.get_docinfo(doctype, name)) {
 			callback(name);

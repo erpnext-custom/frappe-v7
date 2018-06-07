@@ -94,6 +94,7 @@ class DatabaseQuery(object):
 		if args.conditions:
 			args.conditions = "where " + args.conditions
 
+		self.distinct = True
 		if self.distinct:
 			args.fields = 'distinct ' + args.fields
 
