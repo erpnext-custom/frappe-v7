@@ -317,7 +317,7 @@ class DatabaseQuery(object):
 			if isinstance(value, basestring):
 				value = '"{0}"'.format(frappe.db.escape(value, percent=False))
 
-			if f.fieldname in ("creation", "modified"):
+			if f.fieldname in ("creation", "modified", "submission"):
 				column_name = "date_format({tname}.{fname}, '%Y-%m-%d')".format(tname=tname,
 					fname=f.fieldname)
 

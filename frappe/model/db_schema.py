@@ -45,7 +45,7 @@ type_map = {
 }
 
 default_columns = ['name', 'creation', 'modified', 'modified_by', 'owner',
-	'docstatus', 'parent', 'parentfield', 'parenttype', 'idx']
+	'docstatus', 'parent', 'parentfield', 'parenttype', 'idx', 'submission']
 optional_columns = ["_user_tags", "_comments", "_assign", "_liked_by"]
 
 default_shortcuts = ['_Login', '__user', '_Full Name', 'Today', '__today', "now", "Now"]
@@ -162,6 +162,7 @@ class DbTable:
 		frappe.db.sql("""create table `%s` (
 			name varchar({varchar_len}) not null primary key,
 			creation datetime(6),
+			submission datetime(6),
 			modified datetime(6),
 			modified_by varchar({varchar_len}),
 			owner varchar({varchar_len}),

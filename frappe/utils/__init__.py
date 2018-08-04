@@ -16,7 +16,7 @@ from frappe.utils.identicon import Identicon
 from frappe.utils.data import *
 
 default_fields = ['doctype', 'name', 'owner', 'creation', 'modified', 'modified_by',
-	'parent', 'parentfield', 'parenttype', 'idx', 'docstatus']
+	'parent', 'parentfield', 'parenttype', 'idx', 'docstatus', 'submission']
 
 # used in import_docs.py
 # TODO: deprecate it

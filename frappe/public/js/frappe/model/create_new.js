@@ -259,6 +259,7 @@ $.extend(frappe.model, {
 		newdoc.docstatus = 0;
 		newdoc.owner = user;
 		newdoc.creation = '';
+		newdoc.submission = '';
 		newdoc.modified_by = user;
 		newdoc.modified = '';
 

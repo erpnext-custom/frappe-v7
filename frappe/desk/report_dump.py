@@ -14,7 +14,7 @@ def get_data(doctypes, last_modified):
 	
 	import datetime
 	out = {}
-	
+
 	doctypes = json.loads(doctypes)
 	last_modified = json.loads(last_modified)
 		

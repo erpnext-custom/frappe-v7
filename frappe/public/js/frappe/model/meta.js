@@ -170,6 +170,7 @@ $.extend(frappe.meta, {
 		var standard = {
 			'owner': __('Owner'),
 			'creation': __('Created On'),
+			'submission': __('Submitted On'),
 			'modified': __('Last Modified On'),
 			'idx': __('Idx'),
 			'name': __('Name'),
