@@ -171,6 +171,7 @@ $.extend(frappe.meta, {
 			'owner': __('Owner'),
 			'creation': __('Created On'),
 			'submission': __('Submitted On'),
+			'submitted_by': __('Submitted By'),
 			'modified': __('Last Modified On'),
 			'idx': __('Idx'),
 			'name': __('Name'),

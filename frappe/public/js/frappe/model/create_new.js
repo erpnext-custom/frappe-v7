@@ -260,6 +260,7 @@ $.extend(frappe.model, {
 		newdoc.owner = user;
 		newdoc.creation = '';
 		newdoc.submission = '';
+		newdoc.submitted_by = '';
 		newdoc.modified_by = user;
 		newdoc.modified = '';
 

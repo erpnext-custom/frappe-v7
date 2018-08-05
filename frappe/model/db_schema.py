@@ -45,7 +45,7 @@ type_map = {
 }
 
 default_columns = ['name', 'creation', 'modified', 'modified_by', 'owner',
-	'docstatus', 'parent', 'parentfield', 'parenttype', 'idx', 'submission']
+	'docstatus', 'parent', 'parentfield', 'parenttype', 'idx', 'submission', 'submitted_by']
 optional_columns = ["_user_tags", "_comments", "_assign", "_liked_by"]
 
 default_shortcuts = ['_Login', '__user', '_Full Name', 'Today', '__today', "now", "Now"]
@@ -163,6 +163,7 @@ class DbTable:
 			name varchar({varchar_len}) not null primary key,
 			creation datetime(6),
 			submission datetime(6),
+			submitted_by varchar({varchar_len}),
 			modified datetime(6),
 			modified_by varchar({varchar_len}),
 			owner varchar({varchar_len}),
