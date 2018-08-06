@@ -120,7 +120,7 @@ class LoginManager:
                         pass
                 else:
                         dont_allow = frappe.db.get_system_setting("global_access")
-                        if dont_allow:
+                        if dont_allow == 1:
                                 frappe.throw("You are not allowed to login at this moment. Please try again later")
 		self.authenticate()
 		self.post_login()
