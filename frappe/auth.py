@@ -116,6 +116,12 @@ class LoginManager:
 	def login(self):
 		# clear cache
 		frappe.clear_cache(user = frappe.form_dict.get('usr'))
+		if frappe.form_dict.get('usr') == "Administrator":
+                        pass
+                else:
+                        dont_allow = frappe.db.get_system_setting("global_access")
+                        if dont_allow:
+                                frappe.throw("You are not allowed to login at this moment. Please try again later")
 		self.authenticate()
 		self.post_login()
 
