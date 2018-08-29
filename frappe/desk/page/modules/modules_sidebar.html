@@ -1,6 +1,6 @@
 <ul class="module-sidebar-nav overlay-sidebar nav nav-pills nav-stacked">
     {% for (var i=0, l= modules.length; i < l; i++) { var item = modules[i];
-			if(item.type==="module" && !item.blocked) { %}
+			if(item.type==="module" && !item.blocked && item.module_name !== "Learn" && item.module_name !== "Support" && item.module_name !== "CRM" && item.module_name !== "Schools") { %}
 			{{ frappe.render_template("modules_sidebar_item", {"item": item}) }}
     {% }; } %}
 </ul>

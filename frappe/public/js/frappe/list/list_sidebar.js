@@ -77,6 +77,16 @@ frappe.views.ListSidebar = Class.extend({
 		this.page.sidebar.find(".assigned-to-me a").on("click", function() {
 			me.doclistview.assigned_to_me();
 		});
+
+		this.page.sidebar.find(".cancel-link").on("click", function() {
+                        if(frappe.get_meta(me.doclistview.doctype).__workflow_docs.length > 0) {
+                                me.doclistview.filter_list.add_filter(me.doclistview.doctype, 'workflow_state', '!=', "Cancelled");
+                        }
+                        else {
+                                me.doclistview.filter_list.add_filter(me.doclistview.doctype, 'docstatus', '!=', '2');
+                        }
+                        me.doclistview.run()
+                });
 	},
 	setup_list_view_switching: function() {
 		var me = this;
