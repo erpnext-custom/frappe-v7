@@ -201,8 +201,8 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2018-04-23 12:24:09.621757", 
- "modified_by": "Administrator", 
+ "modified": "2018-08-30 07:40:30.682219", 
+ "modified_by": "siva@bt.bt", 
  "module": "Geo", 
  "name": "Currency", 
  "owner": "Administrator", 
@@ -331,6 +331,7 @@
  "quick_entry": 0, 
  "read_only": 0, 
  "read_only_onload": 0, 
+ "sort_field": "modified", 
  "sort_order": "DESC", 
  "track_changes": 0, 
  "track_seen": 0
