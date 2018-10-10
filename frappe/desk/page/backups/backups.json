@@ -3,7 +3,8 @@
  "creation": "2015-09-24 01:26:06.225378", 
  "docstatus": 0, 
  "doctype": "Page", 
- "modified": "2015-09-24 01:26:06.225378", 
+ "idx": 0, 
+ "modified": "2018-10-10 03:25:20.898619", 
  "modified_by": "Administrator", 
  "module": "Desk", 
  "name": "backups", 
@@ -12,6 +13,9 @@
  "roles": [
   {
    "role": "System Manager"
+  }, 
+  {
+   "role": "Admin"
   }
  ], 
  "script": null, 

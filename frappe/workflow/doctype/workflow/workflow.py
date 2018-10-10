@@ -22,6 +22,7 @@ class Workflow(Document):
 		frappe.clear_cache(doctype=self.document_type)
 		meta = frappe.get_meta(self.document_type)
 		if not meta.get_field(self.workflow_state_field):
+			frappe.throw("Create the workflow field first")
 			# create custom field
 			frappe.get_doc({
 				"doctype":"Custom Field",

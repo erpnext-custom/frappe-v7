@@ -181,7 +181,7 @@ frappe.ui.form.Toolbar = Class.extend({
                         this.page.add_menu_item(__('Cancel Document'), function() {
                                 frappe.confirm("Do you really want to <b>Cancel</b> this document?", function() {
                                         frappe.call({
-                                                method: "erpnext.custom_utils.cancel_draft_doc",
+                                                method: "frappe.custom_utils.cancel_draft_doc",
                                                 args: {
                                                         "doctype": me.frm.doctype,
                                                         "docname": me.frm.docname

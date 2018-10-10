@@ -1,7 +1,7 @@
 {
  "allow_copy": 0, 
  "allow_import": 0, 
- "allow_rename": 1, 
+ "allow_rename": 0, 
  "autoname": "field:workflow_name", 
  "beta": 0, 
  "creation": "2012-12-28 10:49:55", 
@@ -194,7 +194,7 @@
    "bold": 0, 
    "collapsible": 0, 
    "default": "workflow_state", 
-   "description": "Field that represents the Workflow State of the transaction (if field is not present, a new hidden Custom Field will be created)", 
+   "description": "Field that represents the Workflow State of the transaction. The field should be a hidden Link field with options as \"Workflow State\". Check the \"Allow on Submit\" too. ", 
    "fieldname": "workflow_state_field", 
    "fieldtype": "Data", 
    "hidden": 0, 
@@ -228,7 +228,7 @@
  "istable": 0, 
  "max_attachments": 0, 
  "menu_index": 0, 
- "modified": "2017-09-04 17:02:29.231174", 
+ "modified": "2018-09-17 04:28:52.501893", 
  "modified_by": "Administrator", 
  "module": "Workflow", 
  "name": "Workflow", 
@@ -279,5 +279,6 @@
  "read_only": 0, 
  "read_only_onload": 0, 
  "sort_order": "DESC", 
+ "track_changes": 0, 
  "track_seen": 0
 }
