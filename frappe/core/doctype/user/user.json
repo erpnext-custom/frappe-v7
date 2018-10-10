@@ -1,7 +1,7 @@
 {
  "allow_copy": 0, 
  "allow_import": 1, 
- "allow_rename": 1, 
+ "allow_rename": 0, 
  "beta": 0, 
  "creation": "2014-03-11 14:55:00", 
  "custom": 0, 
@@ -1546,7 +1546,7 @@
  "istable": 0, 
  "max_attachments": 5, 
  "menu_index": 0, 
- "modified": "2017-11-23 19:22:35.440517", 
+ "modified": "2018-10-03 16:53:44.780328", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "User", 
@@ -1554,7 +1554,7 @@
  "permissions": [
   {
    "amend": 0, 
-   "apply_user_permissions": 1, 
+   "apply_user_permissions": 0, 
    "cancel": 0, 
    "create": 1, 
    "delete": 1, 
