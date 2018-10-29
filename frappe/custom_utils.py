@@ -24,6 +24,8 @@ def cancel_draft_doc(doctype, docname):
                 br.db_set("job_card", "")
         elif doctype == "Overtime Application":
                 doc.db_set("workflow_state", "Cancelled")
+	elif doctype == "Fund Requisition":
+		doc.db_set("workflow_state", "Cancelled")
         else:
                 pass
                 
