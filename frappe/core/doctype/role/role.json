@@ -1,7 +1,7 @@
 {
  "allow_copy": 0, 
  "allow_import": 1, 
- "allow_rename": 1, 
+ "allow_rename": 0, 
  "autoname": "field:role_name", 
  "beta": 0, 
  "creation": "2013-01-08 15:50:01", 
@@ -74,7 +74,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2017-11-07 20:33:52.487516", 
+ "modified": "2018-11-02 11:20:14.302666", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "Role", 

@@ -141,7 +141,7 @@ def add_total_row(result, columns):
 			total_row[i] = result[0][i]
 
 	for i in has_percent:
-		total_row[i] = total_row[i] / len(result)
+		total_row[i] = flt(total_row[i]) / len(result)
 
 	first_col_fieldtype = None
 	if isinstance(columns[0], basestring):
@@ -153,11 +153,10 @@ def add_total_row(result, columns):
 
 	if first_col_fieldtype not in ["Currency", "Int", "Float", "Percent"]:
 		if first_col_fieldtype == "Link":
-			total_row[0] = "'" + _("Total") + "'"
+			total_row[0] = "'" + frappe.bold("Total") + "'"
 		else:
-			total_row[0] = _("Total")
+			total_row[0] = frappe.bold("Total")
 
-	# Following line added by SHIV on 2018/01/26
 	result = list(result)
 
 	result.append(total_row)

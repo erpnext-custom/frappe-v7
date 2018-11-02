@@ -697,7 +697,7 @@
  "issingle": 1, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2018-08-06 19:56:23.483224", 
+ "modified": "2018-10-30 11:59:27.914722", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "System Settings", 
@@ -749,6 +749,6 @@
  "read_only": 0, 
  "read_only_onload": 0, 
  "sort_order": "ASC", 
- "track_changes": 0, 
+ "track_changes": 1, 
  "track_seen": 0
 }
