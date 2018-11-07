@@ -1,7 +1,7 @@
 {
  "allow_copy": 0, 
  "allow_import": 0, 
- "allow_rename": 1, 
+ "allow_rename": 0, 
  "autoname": "field:letter_head_name", 
  "beta": 0, 
  "creation": "2012-11-22 17:45:46", 
@@ -206,7 +206,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 3, 
- "modified": "2017-12-14 10:25:20.534502", 
+ "modified": "2018-11-07 14:37:59.231054", 
  "modified_by": "Administrator", 
  "module": "Print", 
  "name": "Letter Head", 

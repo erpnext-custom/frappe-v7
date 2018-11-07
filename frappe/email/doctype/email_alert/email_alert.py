@@ -17,6 +17,7 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import validate_email_add, nowdate
 from frappe.utils.jinja import validate_template
+from frappe.core.doctype.role.role import get_emails_from_role
 
 class EmailAlert(Document):
 	def validate(self):
