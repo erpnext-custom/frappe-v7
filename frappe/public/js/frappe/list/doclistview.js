@@ -431,11 +431,15 @@ frappe.views.DocListView = frappe.ui.Listing.extend({
 		return args;
 	},
 	assigned_to_me: function() {
-		this.filter_list.add_filter(this.doctype, "_assign", 'like', '%' + user + '%');
+		this.filter_list.add_filter(this.doctype, "_assign", '=', user);
+		this.run();
+	},
+	created_by_me: function() {
+		this.filter_list.add_filter(this.doctype, "owner", '=', user);
 		this.run();
 	},
 	liked_by_me: function() {
-		this.filter_list.add_filter(this.doctype, "_liked_by", 'like', '%' + user + '%');
+		this.filter_list.add_filter(this.doctype, "_liked_by", '=', user);
 		this.run();
 	},
 	remove_liked_by_me: function() {

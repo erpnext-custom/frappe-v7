@@ -24,6 +24,7 @@ frappe.views.ListSidebar = Class.extend({
 
 		this.setup_reports();
 		this.setup_assigned_to_me();
+		this.setup_created_by_me();
 		this.setup_list_view_switching();
 
 		if(frappe.views.calendar[this.doctype]) {
@@ -88,6 +89,12 @@ frappe.views.ListSidebar = Class.extend({
                         me.doclistview.run()
                 });
 	},
+	setup_created_by_me: function() {
+                var me = this;
+                this.page.sidebar.find(".created-by-me a").on("click", function() {
+                        me.doclistview.created_by_me();
+                });
+        },
 	setup_list_view_switching: function() {
 		var me = this;
 		if(this.doclistview.meta.image_field) {
