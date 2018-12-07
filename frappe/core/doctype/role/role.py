@@ -28,12 +28,28 @@ class Role(Document):
 
 # Get email addresses of all users that have been assigned this role
 def get_emails_from_role(role):
-	emails = []
+	# Following code commented and the subsequent added by SHIV on 2018/12/07
+        '''
+        emails = []
 
-	users = frappe.get_list("Has Role", filters={"role": role, "parenttype": "User"}, fields=["parent"])
+        users = frappe.get_list("Has Role", filters={"role": role, "parenttype": "User"}, fields=["parent"])
 
-	for user in users:
-		user_email = frappe.db.get_value("User", user.parent, "email")
-		emails.append(user_email)
+        for user in users:
+                user_email = frappe.db.get_value("User", user.parent, "email")
+                emails.append(user_email)
 
-	return emails
+        return emails
+        '''
+
+        # Following code added by SHIV on 2018/12/07
+        emails = frappe.db.sql_list("""
+                        select ur.parent
+                        from `tabUserRole` ur, `tabUser` u
+                        where ur.parenttype='User'
+                        and ur.role='{0}'
+                        and u.name = ur.parent
+                        and u.enabled = 1
+        """.format(role))
+
+        return emails
+
