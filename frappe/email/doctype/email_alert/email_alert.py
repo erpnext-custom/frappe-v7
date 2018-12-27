@@ -70,6 +70,7 @@ def trigger_daily_alerts():
 	trigger_email_alerts(None, "daily")
 
 def trigger_email_alerts(doc, method=None):
+	'''
 	from jinja2 import TemplateError
 	if frappe.flags.in_import or frappe.flags.in_patch:
 		# don't send email alerts while syncing or patching
@@ -102,6 +103,8 @@ def trigger_email_alerts(doc, method=None):
 				evaluate_alert(doc, alert, eevent)
 			except TemplateError:
 				frappe.throw(_("Error while evaluating Email Alert {0}. Please fix your template.").format(alert))
+	'''
+	pass
 
 def evaluate_alert(doc, alert, event):
 	if isinstance(alert, basestring):
