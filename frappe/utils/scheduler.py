@@ -84,6 +84,8 @@ def enqueue_events(site, queued_jobs):
 	frappe.db.set_value('System Settings', 'System Settings',
 		'scheduler_last_event', nowtime.strftime(DATETIME_FORMAT),
 		update_modified=False)
+	print("SETTING TIME")
+	print(nowtime.strftime(DATETIME_FORMAT))
 	frappe.db.commit()
 
 	out = []

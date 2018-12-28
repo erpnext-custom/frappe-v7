@@ -8,6 +8,7 @@
  "docstatus": 0, 
  "doctype": "DocType", 
  "document_type": "System", 
+ "editable_grid": 0, 
  "fields": [
   {
    "allow_on_submit": 0, 
@@ -336,7 +337,7 @@
    "collapsible": 0, 
    "fieldname": "scheduler_last_event", 
    "fieldtype": "Data", 
-   "hidden": 1, 
+   "hidden": 0, 
    "ignore_user_permissions": 0, 
    "ignore_xss_filter": 0, 
    "in_filter": 0, 
@@ -621,7 +622,7 @@
  "issingle": 1, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2016-06-25 19:25:20.090354", 
+ "modified": "2017-12-29 16:53:19.140567", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "System Settings", 
