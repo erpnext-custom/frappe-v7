@@ -48,6 +48,8 @@ def import_file_by_path(path, force=False, data_import=False, pre_process=None):
 				db_modified = frappe.db.get_value(doc['doctype'], doc['name'], 'modified')
 				if db_modified and doc.get('modified')==get_datetime_str(db_modified):
 					return False
+				else:
+					frappe.permissions.reset_perms(doc['name'])
 
 			original_modified = doc.get("modified")
 
