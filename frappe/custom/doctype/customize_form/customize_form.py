@@ -67,6 +67,7 @@ class CustomizeForm(Document):
 		frappe.db.sql("delete from `tabCustomize Form Field`")
 
 	def fetch_to_customize(self):
+		frappe.throw("Please don't use Customize Form to Edit Doctypes")
 		self.clear_existing_doc()
 		if not self.doc_type:
 			return
@@ -98,6 +99,7 @@ class CustomizeForm(Document):
 		self.name = "Customize Form"
 
 	def save_customization(self):
+		frappe.throw("Please don't use Customize Form to Edit Doctypes")
 		if not self.doc_type:
 			return
 
