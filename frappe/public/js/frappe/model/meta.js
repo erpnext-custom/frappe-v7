@@ -199,8 +199,8 @@ $.extend(frappe.meta, {
 			print_format_list.sort().splice(index, 1);
 			print_format_list.unshift(default_print_format); */
                         var index = print_format_list.indexOf(default_print_format);
-                        print_format_list.splice(index, 1);
-                        print_format_list.unshift(default_print_format);
+			print_format_list.splice(index, 1);
+			print_format_list.unshift(default_print_format);
 		}
 
 		return print_format_list;
