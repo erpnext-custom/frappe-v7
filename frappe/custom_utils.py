@@ -1,3 +1,11 @@
+'''
+--------------------------------------------------------------------------------------------------------------------------
+Version          Author          CreatedOn          ModifiedOn          Remarks
+------------ --------------- ------------------ -------------------  -----------------------------------------------------
+2.0.190225        SHIV                             25/02/2018         * cancel_draft_doc()
+                                                                        * code of `Leave Application` added
+--------------------------------------------------------------------------------------------------------------------------                                                                          
+'''
 from __future__ import unicode_literals
 import frappe
 
@@ -8,6 +16,9 @@ import frappe
 def cancel_draft_doc(doctype, docname):
         # Updating Master table docstatus to 2
         doc = frappe.get_doc(doctype, docname)
+        if doctype == "Leave Application":    ##### Ver 2.0.190225 added by SHIV
+                if doc.get("workflow_state") not in ("Draft","Rejected") and frappe.session.user not in (doc.get("leave_approver"),"Administrator"):
+                        frappe.throw(_("Only leave approver <b>{0}</b> ( {1} ) can cancel this document.").format(doc.leave_approver_name, doc.leave_approver), title="Operation not permitted")
         doc.db_set("docstatus", 2)
 
         # Updating Child tables docstatus to 2
@@ -23,6 +34,8 @@ def cancel_draft_doc(doctype, docname):
 
 
         if doctype == "Material Request":
+		doc.db_set("status", "Cancelled")
+	elif doctype == "Leave Application":    ##### Ver 2.0.190225 added by SHIV
 		doc.db_set("status", "Cancelled")
 	elif doctype == "Travel Claim":
 		if doc.ta:
