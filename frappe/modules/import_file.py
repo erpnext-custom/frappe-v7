@@ -24,7 +24,6 @@ def import_file(module, dt, dn, force=False, pre_process=None):
 
 def get_file_path(module, dt, dn):
 	dt, dn = scrub_dt_dn(dt, dn)
-
 	path = os.path.join(get_module_path(module),
 		os.path.join(dt, dn, dn + ".json"))
 
@@ -49,8 +48,12 @@ def import_file_by_path(path, force=False, data_import=False, pre_process=None):
 				if db_modified and doc.get('modified')==get_datetime_str(db_modified):
 					return False
 				else:
-					if doc['doctype'] == "DocType":
-						frappe.permissions.reset_perms(doc['name'])
+					if doc['doctype'] == "DocType" and not doc['istable']:
+						if doc['name'] in (""):
+							pass
+						else:
+							print(doc['name'])
+							frappe.permissions.reset_perms(doc['name'])
 
 			original_modified = doc.get("modified")
 

@@ -1,7 +1,7 @@
 {
  "allow_copy": 0, 
  "allow_import": 0, 
- "allow_rename": 1, 
+ "allow_rename": 0, 
  "autoname": "field:email_account_name", 
  "beta": 0, 
  "creation": "2014-09-11 12:04:34.163728", 
@@ -910,7 +910,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2017-09-01 16:33:57.173553", 
+ "modified": "2019-02-27 10:13:50.701305", 
  "modified_by": "Administrator", 
  "module": "Email", 
  "name": "Email Account", 
@@ -963,5 +963,6 @@
  "read_only_onload": 0, 
  "sort_field": "modified", 
  "sort_order": "DESC", 
+ "track_changes": 0, 
  "track_seen": 0
 }
