@@ -5,7 +5,6 @@ globals attached to frappe module
 + some utility functions that should probably be moved
 """
 from __future__ import unicode_literals
-
 from werkzeug.local import Local, release_local
 import os, sys, importlib, inspect, json
 
@@ -557,6 +556,8 @@ def set_value(doctype, docname, fieldname, value):
 	"""Set document value. Calls `frappe.client.set_value`"""
 	import frappe.client
 	return frappe.client.set_value(doctype, docname, fieldname, value)
+
+
 
 def get_doc(arg1, arg2=None):
 	"""Return a `frappe.model.document.Document` object of the given type and name.

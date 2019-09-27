@@ -37,12 +37,12 @@
 
 .form-signin {
   max-width: 360px;
-  padding-right: 30px;
-  padding-left: 30px;
-  padding-top: 50px;
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-top: 20px;
   margin: 0 auto;
   border-radius: 5px;
-  background-color: #fff;
+  background-color: #d6f3df;
 }
 .form-signin .form-signin-heading,
 .form-signin .checkbox {
@@ -89,7 +89,7 @@ h5:before {
   display: block;
   height: 1px;
   position: absolute;
-    top: 50%;
+  top: 50%;
   width: 100%;
 }
 h5:before {
@@ -103,13 +103,15 @@ h5:before {
     text-transform: uppercase;
     letter-spacing: 0.5px;
 	font-weight: 300;
+	height:110px;
+	background: url("http://nhdcl.erp.bt/files/favicon.png") no-repeat center;
 }
 
 p{
 	margin-bottom:20px;
 }
 .btn-login, .btn-signup, .btn-forgot {
-	background: #7575ff;
+	background: #2d7b3c;
 	color: white;
 }
 

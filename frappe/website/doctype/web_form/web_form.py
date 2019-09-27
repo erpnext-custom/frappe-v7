@@ -60,7 +60,7 @@ class WebForm(WebsiteGenerator):
 						df.options = "\n".join([""] + options)
 
 				except frappe.PermissionError:
-					df.hidden = 1
+					df.hidden = 1 
 
 			# TODO translate options of Select fields like Country
 

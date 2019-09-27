@@ -50,7 +50,10 @@ def import_file_by_path(path, force=False, data_import=False, pre_process=None):
 					return False
 				else:
 					if doc['doctype'] == "DocType":
-						frappe.permissions.reset_perms(doc['name'])
+						try:
+							frappe.permissions.reset_perms(doc['name'])
+						except:
+							print doc['name']
 
 			original_modified = doc.get("modified")
 

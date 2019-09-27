@@ -264,24 +264,41 @@ class Meta(Document):
 		return self.high_permlevel_fields
 
 	def get_dashboard_data(self):
-		'''Returns dashboard setup related to this doctype.
+                '''Returns dashboard setup related to this doctype.
 
-		This method will return the `data` property in the
-		`[doctype]_dashboard.py` file in the doctype folder'''
-		try:
-			module = load_doctype_module(self.name, suffix='_dashboard')
-			data = frappe._dict(module.data)
-		except ImportError:
-			data = frappe._dict()
+                This method will return the `data` property in the
+                `[doctype]_dashboard.py` file in the doctype folder'''
+                data = frappe._dict()
+                try:
+                        module = load_doctype_module(self.name, suffix='_dashboard')
+                        if hasattr(module, 'get_data'):
+                                data = frappe._dict(module.get_data())
+			else:
+				data = frappe._dict(module.data)
+                except ImportError:
+                        pass
 
-		return data
+                return data
 
 doctype_table_fields = [
 	frappe._dict({"fieldname": "fields", "options": "DocField"}),
 	frappe._dict({"fieldname": "permissions", "options": "DocPerm"})
-]
+	]
 
 #######
+
+'''def get_dashboard_data(self):
+                Returns dashboard setup related to this doctype.
+
+                This method will return the `data` property in the
+                `[doctype]_dashboard.py` file in the doctype folder
+                try:
+                        module = load_doctype_module(self.name, suffix='_dashboard')
+                        data = frappe._dict(module.data)
+                except ImportError:
+                        data = frappe._dict()
+
+                return data'''
 
 def is_single(doctype):
 	try:

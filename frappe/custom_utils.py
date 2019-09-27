@@ -20,7 +20,7 @@ def cancel_draft_doc(doctype, docname):
         if frappe.db.exists("Workflow", doctype):
                 wfs = frappe.db.get_values("Workflow Document State", {"parent":doctype, "doc_status": 2}, "state", as_dict=True)
                 doc.db_set("workflow_state", wfs[0].state if len(wfs) == 1 else "Cancelled")
-
+	
 
         if doctype == "Material Request":
 		doc.db_set("status", "Cancelled")
@@ -31,8 +31,14 @@ def cancel_draft_doc(doctype, docname):
 	elif doctype == "Job Card":
 		br = frappe.get_doc("Break Down Report", doc.break_down_report)
                 br.db_set("job_card", None)
+	elif doctype == "Asset":
+		aid_name = frappe.db.get_value("Asset Issue Details", {"reference_code":doc.name , "docstatus":1}, "name")
+                if aid_name:
+                        frappe.db.sql("Update `tabAsset Issue Details` set reference_code = '', docstatus=2 where name = %s", aid_name)
+                        frappe.msgprint("Asset No. {0} cancelled along with Asset Issue Details No {1} ".format(doc.name, aid_name))
         else:
                 pass
+
 
         '''
 	if doctype == "Material Request":
