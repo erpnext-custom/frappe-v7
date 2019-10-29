@@ -73,6 +73,7 @@ def prepare_options(html, options):
 def read_options_from_html(html):
 	options = {}
 	soup = BeautifulSoup(html, "html5lib")
+	soup = BeautifulSoup(html, "html.parser")
 
 	# extract pdfkit options from html
 	for html_id in ("margin-top", "margin-bottom", "margin-left", "margin-right", "page-size"):

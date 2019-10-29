@@ -128,6 +128,7 @@ class File(NestedSet):
                 if os.path.isfile(file_name):
                         file_mim_type = mime_doc.from_file(file_name)
                 else:
+			return
                         file_mim_type = mime_doc.from_file(str(os.getcwd()) + "/" + str(get_site_name(frappe.local.request.host)) + "/private/files/" + str(self.file_name.lstrip("/")))
                 if not file_mim_type or file_mim_type not in ('application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/gif', 'image/jpeg', 'image/png', 'application/pdf', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'):
                         frappe.throw("You might be uploading insecure files. Only images, documents, and pdf files are allowed", title="File Uploading Blocked")
