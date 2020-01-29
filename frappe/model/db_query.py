@@ -100,6 +100,7 @@ class DatabaseQuery(object):
 
 		query = """select %(fields)s from %(tables)s %(conditions)s
 			%(group_by)s %(order_by)s %(limit)s""" % args
+		
 
 		return frappe.db.sql(query, as_dict=not self.as_list, debug=self.debug, update=self.update)
 
