@@ -46,10 +46,10 @@ class User(Document):
 		#Test password strength
 		if self.new_password:
 			from frappe.utils.password_strength import test_password_strength
-			result = test_password_strength(self.new_password)
-			if not flt(result['score']) > 2:
-				frappe.throw(str(result['feedback']['warning']) + "; " + str(result['feedback']['suggestions']))
-
+			#result = test_password_strength(self.new_password)
+			#if not flt(result['score']) > 2:
+			#	frappe.throw(str(result['feedback']['warning']) + "; " + str(result['feedback']['suggestions']))
+			pass
 		# clear new password
 		self.__new_password = self.new_password
 		self.new_password = ""

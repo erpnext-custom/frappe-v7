@@ -11,15 +11,13 @@ $.extend(frappe.model, {
 
 	std_fields_list: ['name', 'owner', 'creation', 'modified', 'modified_by',
 		'_user_tags', '_comments', '_assign', '_liked_by', 'docstatus',
-		'parent', 'parenttype', 'parentfield', 'idx', 'submission', 'submitted_by'],
+		'parent', 'parenttype', 'parentfield', 'idx'],
 
 	std_fields: [
 		{fieldname:'name', fieldtype:'Link', label:__('ID')},
 		{fieldname:'owner', fieldtype:'Data', label:__('Created By')},
 		{fieldname:'idx', fieldtype:'Int', label:__('Index')},
 		{fieldname:'creation', fieldtype:'Date', label:__('Created On')},
-		{fieldname:'submission', fieldtype:'Date', label:__('Submitted On')},
-		{fieldname:'submitted_by', fieldtype:'Data', label:__('Submitted By')},
 		{fieldname:'modified', fieldtype:'Date', label:__('Last Updated On')},
 		{fieldname:'modified_by', fieldtype:'Data', label:__('Last Updated By')},
 		{fieldname:'_user_tags', fieldtype:'Data', label:__('Tags')},

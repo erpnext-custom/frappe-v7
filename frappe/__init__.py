@@ -262,6 +262,7 @@ def msgprint(msg, title=None, raise_exception=0, as_table=False, indicator=None,
 			import inspect
 
 			if inspect.isclass(raise_exception) and issubclass(raise_exception, Exception):
+				
 				raise raise_exception, encode(msg)
 			else:
 				raise ValidationError, encode(msg)
@@ -928,7 +929,7 @@ def copy_doc(doc, ignore_no_copy=True):
 			if hasattr(d, df.fieldname):
 				d.set(df.fieldname, None)
 
-	fields_to_clear = ['name', 'owner', 'creation', 'modified', 'modified_by', 'submission', "submitted_by"]
+	fields_to_clear = ['name', 'owner', 'creation', 'modified', 'modified_by']
 
 	if not local.flags.in_test:
 		fields_to_clear.append("docstatus")

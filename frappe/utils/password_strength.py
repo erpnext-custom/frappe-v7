@@ -7,9 +7,10 @@ import zxcvbn
 
 def test_password_strength(password, user_inputs=None):
 	'''Wrapper around zxcvbn.password_strength'''
-	result = zxcvbn.password_strength(password, user_inputs)
-	result['feedback'] = get_feedback(result['score'], result['match_sequence'])
-	return result
+	#result = zxcvbn.password_strength(password, user_inputs)
+	#result['feedback'] = get_feedback(result['score'], result['match_sequence'])
+	#return result
+	pass
 
 # NOTE: code modified for frappe translations
 # -------------------------------------------
