@@ -300,6 +300,23 @@ class CookieManager:
 def get_logged_user():
 	return frappe.session.user
 
+##
+# ADDED BY KINLEY TTPLNRDCL
+##
+@frappe.whitelist()
+def get_loggedin_user_details():
+	user = frappe.get_doc("User", frappe.session.user)
+	frappe.local.response['login_id'] = user.login_id
+	frappe.local.response['username'] = user.username
+	frappe.local.response['mobile_no'] = user.mobile_no
+	frappe.local.response['first_name'] = user.first_name
+	frappe.local.response['api_key'] = user.api_key
+	frappe.local.response['api_secret'] = user.api_secret
+	frappe.local.response['mode_preference'] = user.mode_preference
+	frappe.local.response['blacklisted'] = user.blacklisted
+	frappe.local.response['profile_verified'] = user.profile_verified
+	frappe.local.response['profile_submitted'] = user.profile_submitted
+
 def clear_cookies():
 	if hasattr(frappe.local, "session"):
 		frappe.session.sid = ""
@@ -312,3 +329,4 @@ def get_website_user_home_page(user):
 		return '/' + home_page.strip('/')
 	else:
 		return '/me'
+

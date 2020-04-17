@@ -1,16 +1,10 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # MIT License. See license.txt
-"""
-	AUTHOR		DATE		REMARKS
- ----------------- ---------------- -------------------------------------------------
-        SHIV          2019/11/15      * Field account_type is introduced
-				      * method send_pin added
-"""
 
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
-from frappe.utils import cint, flt, has_gravatar, format_datetime, now_datetime, get_formatted_email, nowdate
+from frappe.utils import cint, flt, has_gravatar, format_datetime, now_datetime, get_formatted_email
 from frappe import throw, msgprint, _
 from frappe.utils.password import update_password as _update_password
 from frappe.desk.notifications import clear_notifications
@@ -36,17 +30,8 @@ class User(Document):
 		if self.get("is_admin") or self.get("is_guest"):
 			self.name = self.first_name
 		else:
-			### Ver191115.0 Begins ###
-			'''
 			self.email = self.email.strip()
 			self.name = self.email
-			'''
-			if self.account_type == "ERP":
-				self.email = self.email.strip()
-				self.name = self.email
-			else:
-				self.name = self.login_id.strip().upper()
-			###  Ver191115.0 Ends  ###
 
 	def onload(self):
 		self.set_onload('all_modules',
@@ -69,17 +54,8 @@ class User(Document):
 		self.__new_password = self.new_password
 		self.new_password = ""
 		
-		### Ver20191115.0 Begins ###
-		# NRDCLTTPL BEGINS
-		# Following code replaced by subsequent, by SHIV on 2019/11/15
-		'''
 		if self.name not in STANDARD_USERS:
 			self.validate_email_type(self.email)
-		'''
-		if self.name not in STANDARD_USERS and self.account_type == "ERP":
-			self.validate_email_type(self.email)
-		# NRDCLTTPL BEGINS
-		###  Ver20191115.0 Ends  ###
 		self.add_system_manager_role()
 		self.set_system_user()
 		self.set_full_name()
@@ -100,23 +76,6 @@ class User(Document):
 		clear_notifications(user=self.name)
 		frappe.clear_cache(user=self.name)
 		self.send_password_notification(self.__new_password)
-
-	def after_insert(self):
-		### NRDCLTTPL BEGINS, Added by SHIV on 2019/11/29
-		self.create_user_account()
-		### NRDCLTTPL ENDS
-
-	def create_user_account(self):
-		if self.account_type == "CRM":
-			doc = frappe.new_doc("User Account")
-			doc.user      = self.name
-			doc.full_name = self.full_name
-			doc.first_name= self.first_name
-			doc.last_name = self.last_name
-			doc.cid       = self.name
-			doc.mobile_no = self.mobile_no
-			doc.alternate_mobile_no = self.alternate_mobile_no
-			doc.save(ignore_permissions=True)
 
 	def check_demo(self):
 		if frappe.session.user == 'demo@erpnext.com':
@@ -202,8 +161,7 @@ class User(Document):
 
 					if not self.flags.no_welcome_mail and self.send_welcome_email:
 						self.send_welcome_mail_to_user()
-						if self.email:
-							msgprint(_("Welcome email sent"))
+						msgprint(_("Welcome email sent"))
 						return
 			else:
 				self.email_new_password(new_password)
@@ -246,31 +204,14 @@ class User(Document):
 			(self.first_name and " " or '') + (self.last_name or '')
 
 	def password_reset_mail(self, link):
-		### Version20191115.0 Begins ###
-		# Following code added by SHIV on 2019/11/15
-		if not self.email:
-			return
-		###  Version20191115.0 Ends  ###
-
 		self.send_login_mail(_("Password Reset"),
 			"templates/emails/password_reset.html", {"link": link}, now=True)
 
 	def password_update_mail(self, password):
-		### Version20191115.0 Begins ###
-		# Following code added by SHIV on 2019/11/15
-		if not self.email:
-			return
-		###  Version20191115.0 Ends  ###
-
 		self.send_login_mail(_("Password Update"),
 			"templates/emails/password_update.html", {"new_password": password}, now=True)
 
 	def send_welcome_mail_to_user(self):
-		### Version20191115.0 Begins ###
-		# Following code added by SHIV on 2019/11/15
-		if not self.email:
-			return
-		###  Version20191115.0 Ends  ###
 		from frappe.utils import get_url
 
 		link = self.reset_password()
@@ -279,11 +220,6 @@ class User(Document):
 
 	def send_login_mail(self, subject, template, add_args, now=None):
 		"""send mail with login details"""
-		### Version20191115.0 Begins ###
-		# Following code added by SHIV on 2019/11/15
-		if not self.email:
-			return
-		###  Version20191115.0 Ends  ###
 		from frappe.utils.user import get_user_fullname
 		from frappe.utils import get_url
 
@@ -353,11 +289,6 @@ class User(Document):
 		self.validate_email_type(newdn)
 
 	def validate_email_type(self, email):
-		### Version20191115.0 Begins ###
-		# Following code added by SHIV on 2019/11/15
-		if not self.email:
-			return
-		###  Version20191115.0 Ends  ###
 		from frappe.utils import validate_email_add
 		validate_email_add(email.strip(), True)
 
@@ -625,214 +556,6 @@ def sign_up(email, full_name):
 		user.insert()
 		return _("Registration Details Emailed.")
 
-# ==============================================================================================================================
-### Version20191117 Begins ###
-# Following methods added by SHIV on 2019/11/17
-# NRDCLTTPL TTPLNRDCL BEGINS
-# ==============================================================================================================================
-@frappe.whitelist(allow_guest=True)
-def crm_sign_up(full_name, login_id, mobile_no, alternate_mobile_no, email, pin):
-	user = frappe.db.get("User", login_id.strip())
-	full_name = str(full_name).strip()
-	login_id  = str(login_id).strip()
-	mobile_no = validate_mobile_no(mobile_no)
-	if alternate_mobile_no:
-		alternate_mobile_no = validate_mobile_no(alternate_mobile_no)
-	email     = str(email).strip()
-	pin	  = str(pin).strip()
-	if user:
-		if user.disabled:
-			frappe.throw('Account Disabled')
-		else:
-			frappe.throw("User {0} Already Registered".format(login_id))
-	else:
-		if not frappe.db.sql("""select count(*) from `__PIN` where login_id='{login_id}' 
-			and pin = password(concat('{pin}',salt))""".format(login_id=login_id,pin=pin))[0][0]:
-			frappe.throw("Invalid CID Number or PIN")
-		
-		'''	
-		if frappe.db.sql("""select count(*) from tabUser where
-			HOUR(TIMEDIFF(CURRENT_TIMESTAMP, TIMESTAMP(modified)))=1""")[0][0] > 200:
-			frappe.msgprint("Login is closed for sometime, please check back again in an hour.")
-			frappe.throw("Too Many New Users")
-		'''
-
-		# create user
-		from frappe.utils import random_string
-		user = frappe.get_doc({
-			"doctype":"User",
-			"account_type": "CRM",
-			"first_name": full_name,
-			"username": login_id,
-			"login_id": login_id,
-			"mobile_no": mobile_no,
-			"alternate_mobile_no": alternate_mobile_no,
-			"email": email,
-			"enabled": 1,
-			"new_password": pin,
-			"user_type": "System User",
-			"api_key": frappe.generate_hash(length=15),
-			"api_secret": frappe.generate_hash(length=15),
-			"user_roles": [{"role": "CRM User"}]
-		})
-		user.flags.ignore_permissions = True
-		user.save()
-
-		if email:
-			return _("Registration Details Emailed.")
-		else:
-			return _("You are successfully registered.")
-
-def create_pin(full_name, login_id, mobile_no):
-	import random
-	salt = frappe.generate_hash()
-	full_name = str(full_name).strip()
-	login_id  = str(login_id).strip()
-	mobile_no = validate_mobile_no(mobile_no)
-	pin = random.randint(1000,9999)
-
-	frappe.db.sql("""insert into __PIN (full_name,login_id,mobile_no,pin,salt,owner,creation)
-		values (%(full_name)s, %(login_id)s, %(mobile_no)s, password(concat(%(pin)s, %(salt)s)), %(salt)s, %(full_name)s,now())
-		on duplicate key update
-			pin=password(concat(%(pin)s, %(salt)s)), salt=%(salt)s""",
-		{ 'full_name': full_name, 'login_id': login_id, 'mobile_no': str(mobile_no)[-8:], 'pin': pin, 'salt': salt })
-	return pin
-
-@frappe.whitelist(allow_guest=True)
-def send_pin(full_name, login_id, mobile_no, request_type="signup"):
-	pin = None
-	message = ""
-	log_msg = ""
-	full_name = str(full_name).strip()
-	login_id  = str(login_id).strip()
-	mobile_no = validate_mobile_no(mobile_no)
-	if request_type == "signup":
-		if frappe.db.exists("User", login_id):
-			frappe.throw("Already Registered!")
-
-		pin = create_pin(full_name, login_id, mobile_no)
-		message = "Dear "+full_name+", your PIN is {0} for login id {1}".format(pin,login_id)
-		log_msg = "Dear "+full_name+", your PIN is {0} for login id {1}".format(len(str(pin))*"*",login_id)
-	elif request_type == "reset":
-		pin = create_pin(full_name, login_id, mobile_no)
-		user = frappe.get_doc("User", login_id)
-		user.new_password = pin
-		user.save(ignore_permissions=True)
-		message = "Dear "+user.full_name+", your PIN is reset to {0} for login id {1}".format(pin,login_id)
-		log_msg = "Dear "+user.full_name+", your PIN is reset to {0} for login id {1}".format(len(str(pin))*"*",login_id)
-
-	if pin:
-		send_sms(mobile_no, message, log_msg)
-		return _("An SMS sent with OTP.")
-	else:
-		frappe.throw("Something went wrong. Please contact administrator")
-
-def validate_mobile_no(mobile_no):
-	mobile_no = str(mobile_no).strip().lstrip("0")
-	errors = []
-
-	if not mobile_no:
-		errors = ["Mobile Number is mandatory", "Invalid Data"]
-
-	# remove invalid character
-	for x in [' ', '+', '-', '(', ')']:
-		mobile_no = mobile_no.replace(x, '')
-
-	# validate mobile number
-	if len(mobile_no) < 8:
-		errors = ["Mobile Number should be minimum 8-digit in length", "Invalid Data"]
-	elif len(mobile_no) == 8 and mobile_no[:2] not in ("17","16","77"):
-		errors = ["Invalid Mobile Number", "Invalid Data"]
-	elif len(mobile_no) > 8:
-		if mobile_no[:5] not in ("97517","0097517","97516","0097516","97577","0097577"):
-			errors = ["Invalid Mobile Number", "Invalid Data"]
-		else: 
-			if len(mobile_no[3:]) != 8:
-				errors = ["Invalid Mobile Number", "Invalid Data"]
-		mobile_no = mobile_no[-8:]
-	else:
-		if not cint(mobile_no):
-			errors = ["Invalid Mobile Number", "Invalid Data"]
-
-	if errors:
-		frappe.throw(errors[0])
-	return "975"+str(mobile_no)[-8:]
-
-def send_sms(receiver, message, log_msg=''):
-	import requests
-	from erpnext.integrations import SendSMS
-	
-	try:
-		params = {
-			"sender_name": "NRDCL",
-			"to": receiver,
-			"message": message
-		}
-		params = frappe._dict(params)
-		resp = SendSMS('NRDCL', receiver, message)
-		if resp:
-			args = params.update({"log_msg": log_msg, "receiver_list": [receiver]})
-			create_sms_log(args,[receiver])
-	except Exception, e:
-		pass
-
-def send_sms_old(receiver, message, log_msg=''):
-	import requests
-
-	try:
-		params = {
-			"sender_name": "NRDCL",
-			"to": receiver,
-			"message": message
-		}
-		params = frappe._dict(params)
-		resp = requests.get("http://fleet.bt/smsapi/sendsms.php?sender={sender_name}&message={message}&to={to}".format(**params),timeout=1)
-		args = params.update({"log_msg": log_msg, "receiver_list": [receiver]})
-		create_sms_log(args,[receiver])
-	except Exception, e:
-		frappe.throw(str(e))
-		
-def create_sms_log(args, sent_to):
-	sl = frappe.new_doc('SMS Log')
-	sl.sender_name = args['sender_name']
-	sl.sent_on = nowdate()
-	sl.message = args['log_msg'] if args['log_msg'] else args['message']
-	sl.no_of_requested_sms = len(args['receiver_list'])
-	sl.requested_numbers = "\n".join(args['receiver_list'])
-	sl.no_of_sent_sms = len(sent_to)
-	sl.sent_to = "\n".join(sent_to)
-	sl.flags.ignore_permissions = True
-	sl.save()
-
-@frappe.whitelist(allow_guest=True)
-def crm_reset_password(login_id, mobile_no):
-	login_id = str(login_id).strip()
-	mobile_no= str(mobile_no).strip()
-	if login_id=="Administrator":
-		return _("Not allowed to reset the password of {0}").format(user)
-
-	try:
-		mobile_no = validate_mobile_no(mobile_no)
-		if frappe.db.exists("User", login_id):
-			user = frappe.db.sql("""select name from `tabUser` where name = '{login_id}'
-				and substr(mobile_no,-8) = '{mobile_no}'""".format(login_id=login_id,mobile_no=mobile_no[-8:]))
-			if user:
-				user = user[0][0]
-			else:
-				frappe.throw(_("Invalid combination of CID and Mobile Number"))
-
-			doc = frappe.get_doc("User", user)
-			send_pin(doc.full_name, doc.login_id, doc.mobile_no, request_type="reset")
-			return _("Password reset successful")
-		else:
-			frappe.throw(_("User {0} does not exist!").format(login_id))
-	except frappe.DoesNotExistError:
-		frappe.throw(_("User {0} does not exist!!!").format(login_id))
-# ==============================================================================================================================
-# NRDCLTTPL ENDS
-###  Version20191117 Ends  ###
-# ==============================================================================================================================
-
 @frappe.whitelist(allow_guest=True)
 def reset_password(user):
 	if user=="Administrator":
@@ -846,7 +569,7 @@ def reset_password(user):
 		return _("Password reset instructions have been sent to your email")
 
 	except frappe.DoesNotExistError:
-		frappe.throw("User {0} does not exist").format(user)
+		return _("User {0} does not exist").format(user)
 
 def user_query(doctype, txt, searchfield, start, page_len, filters):
 	from frappe.desk.reportview import get_match_cond
@@ -949,26 +672,3 @@ def extract_mentions(txt):
 	"""Find all instances of @username in the string.
 	The mentions will be separated by non-word characters or may appear at the start of the string"""
 	return re.findall(r'(?:[^\w]|^)@([\w]*)', txt)
-
-##
-# ADDED BY KINLEY TTPLNRDCL
-##
-@frappe.whitelist()
-def generate_keys(user):
-	"""
-	generate api key and api secret
-
-	:param user: str
-	"""
-	if "System Manager" in frappe.get_roles():
-		user_details = frappe.get_doc("User", user)
-		api_secret = frappe.generate_hash(length=15)
-		# if api key is not set generate api key
-		if not user_details.api_key:
-			api_key = frappe.generate_hash(length=15)
-			user_details.api_key = api_key
-		user_details.api_secret = api_secret
-		user_details.save()
-
-		return {"api_secret": api_secret}
-	frappe.throw(frappe._("Not Permitted"), frappe.PermissionError)

@@ -1,3 +1,9 @@
+/*
+ *      AUTHOR        DATE          REMARKS
+ *   ----------  --------------  ---------------------------------------------------
+ *      SHIV      2019/11/15     * Field account_type introduced
+ * */ 
+
 frappe.ui.form.on('User', {
 	before_load: function(frm) {
 		frappe.setup_language_field(frm);
@@ -36,7 +42,7 @@ frappe.ui.form.on('User', {
 	},
 	refresh: function(frm) {
 		var doc = frm.doc;
-
+		enable_disable(frm);
 		if(doc.name===user && !doc.__unsaved
 			&& frappe.all_timezones
 			&& (doc.language || frappe.boot.user.language)
@@ -93,8 +99,25 @@ frappe.ui.form.on('User', {
 
 		if(user!="Administrator") {
 			frm.toggle_enable('email', doc.__islocal);
-		}
-	}
+		} 
+	},
+	account_type: function(frm){
+		enable_disable(frm);
+	},
+	//# ADDED BY KINLEY TTPLNRDCL
+	generate_keys: function(frm){
+                frappe.call({
+                        method: 'frappe.core.doctype.user.user.generate_keys',
+                        args: {
+                                user: frm.doc.name
+                        },
+                        callback: function(r){
+                                if(r.message){
+                                        frappe.msgprint(__("Save API Secret: ") + r.message.api_secret);
+                                }
+                        }
+                })
+        }
 })
 
 
@@ -331,3 +354,11 @@ frappe.RoleEditor = Class.extend({
 		this.perm_dialog.$wrapper.find('.modal-dialog').css("width", "800px");
 	}
 });
+
+/*** Version20191115.0 Begins ***/
+// Following function is created by SHIV on 2019/11/15
+var enable_disable = function(frm){
+	cur_frm.toggle_reqd(["email"],(frm.doc.account_type == "ERP"));
+	cur_frm.toggle_reqd(["login_id","mobile_no"],(frm.doc.account_type == "CRM"));
+}
+/***  Version20191115.0 Ends ***/

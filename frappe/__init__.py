@@ -296,6 +296,7 @@ def throw(msg, exc=ValidationError, title=None):
 
 	:param msg: Message.
 	:param exc: Exception class. Default `frappe.ValidationError`"""
+	local.response.NRDCL_ERROR = msg
 	msgprint(msg, raise_exception=exc, title=title, indicator='red')
 
 def emit_js(js, user=False, **kwargs):

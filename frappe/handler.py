@@ -9,10 +9,16 @@ import frappe.async
 import frappe.sessions
 import frappe.utils.file_manager
 import frappe.desk.form.run_method
+#NRDCLTTPL
 from frappe.utils.response import build_response
+#END
+from frappe.api import validate_auth_via_api_keys
 
 def handle():
 	"""handle request"""
+	#NRDCLTTPL
+	validate_auth_via_api_keys()
+	#END
 	cmd = frappe.local.form_dict.cmd
 
 	if cmd!='login':
@@ -43,7 +49,7 @@ def is_whitelisted(method):
 	# check if whitelisted
 	if frappe.session['user'] == 'Guest':
 		if (method not in frappe.guest_methods):
-			frappe.msgprint(_("Not permitted"))
+			frappe.throw(_("Not permitted"), frappe.PermissionError)
 			raise frappe.PermissionError('Not Allowed, {0}'.format(method))
 
 		if method not in frappe.xss_safe_methods:
@@ -55,7 +61,7 @@ def is_whitelisted(method):
 
 	else:
 		if not method in frappe.whitelisted:
-			frappe.msgprint(_("Not permitted"))
+			frappe.throw(_("Not permitted"), frappe.PermissionError)
 			raise frappe.PermissionError('Not Allowed, {0}'.format(method))
 
 @frappe.whitelist(allow_guest=True)

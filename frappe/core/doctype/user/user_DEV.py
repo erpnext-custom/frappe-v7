@@ -632,30 +632,21 @@ def sign_up(email, full_name):
 # ==============================================================================================================================
 @frappe.whitelist(allow_guest=True)
 def crm_sign_up(full_name, login_id, mobile_no, alternate_mobile_no, email, pin):
-	user = frappe.db.get("User", login_id.strip())
-	full_name = str(full_name).strip()
-	login_id  = str(login_id).strip()
-	mobile_no = validate_mobile_no(mobile_no)
-	if alternate_mobile_no:
-		alternate_mobile_no = validate_mobile_no(alternate_mobile_no)
-	email     = str(email).strip()
-	pin	  = str(pin).strip()
+	user = frappe.db.get("User", login_id)
 	if user:
 		if user.disabled:
-			frappe.throw('Account Disabled')
+			frappe.throw('Already registered but disabled')
 		else:
-			frappe.throw("User {0} Already Registered".format(login_id))
+			frappe.throw("Already Registered")
 	else:
 		if not frappe.db.sql("""select count(*) from `__PIN` where login_id='{login_id}' 
-			and pin = password(concat('{pin}',salt))""".format(login_id=login_id,pin=pin))[0][0]:
-			frappe.throw("Invalid CID Number or PIN")
-		
-		'''	
+			and pin = password(concat('{pin}',salt))""".format(login_id=login_id.strip(),pin=pin.strip()))[0][0]:
+			frappe.throw("Invalid CID/LicenseNo or PIN")
+			
 		if frappe.db.sql("""select count(*) from tabUser where
 			HOUR(TIMEDIFF(CURRENT_TIMESTAMP, TIMESTAMP(modified)))=1""")[0][0] > 200:
 			frappe.msgprint("Login is closed for sometime, please check back again in an hour.")
 			frappe.throw("Too Many New Users")
-		'''
 
 		# create user
 		from frappe.utils import random_string
@@ -686,16 +677,13 @@ def crm_sign_up(full_name, login_id, mobile_no, alternate_mobile_no, email, pin)
 def create_pin(full_name, login_id, mobile_no):
 	import random
 	salt = frappe.generate_hash()
-	full_name = str(full_name).strip()
-	login_id  = str(login_id).strip()
-	mobile_no = validate_mobile_no(mobile_no)
 	pin = random.randint(1000,9999)
 
 	frappe.db.sql("""insert into __PIN (full_name,login_id,mobile_no,pin,salt,owner,creation)
 		values (%(full_name)s, %(login_id)s, %(mobile_no)s, password(concat(%(pin)s, %(salt)s)), %(salt)s, %(full_name)s,now())
 		on duplicate key update
 			pin=password(concat(%(pin)s, %(salt)s)), salt=%(salt)s""",
-		{ 'full_name': full_name, 'login_id': login_id, 'mobile_no': str(mobile_no)[-8:], 'pin': pin, 'salt': salt })
+		{ 'full_name': full_name, 'login_id': login_id, 'mobile_no': mobile_no, 'pin': pin, 'salt': salt })
 	return pin
 
 @frappe.whitelist(allow_guest=True)
@@ -703,19 +691,16 @@ def send_pin(full_name, login_id, mobile_no, request_type="signup"):
 	pin = None
 	message = ""
 	log_msg = ""
-	full_name = str(full_name).strip()
-	login_id  = str(login_id).strip()
-	mobile_no = validate_mobile_no(mobile_no)
 	if request_type == "signup":
-		if frappe.db.exists("User", login_id):
-			frappe.throw("Already Registered!")
+		if frappe.db.exists("User", login_id.strip()):
+			frappe.throw("Already Registered")
 
-		pin = create_pin(full_name, login_id, mobile_no)
+		pin = create_pin(full_name.strip(), login_id.strip(), mobile_no.strip())
 		message = "Dear "+full_name+", your PIN is {0} for login id {1}".format(pin,login_id)
 		log_msg = "Dear "+full_name+", your PIN is {0} for login id {1}".format(len(str(pin))*"*",login_id)
 	elif request_type == "reset":
-		pin = create_pin(full_name, login_id, mobile_no)
-		user = frappe.get_doc("User", login_id)
+		pin = create_pin(full_name.strip(), login_id.strip(), mobile_no.strip())
+		user = frappe.get_doc("User", login_id.strip())
 		user.new_password = pin
 		user.save(ignore_permissions=True)
 		message = "Dear "+user.full_name+", your PIN is reset to {0} for login id {1}".format(pin,login_id)
@@ -756,33 +741,15 @@ def validate_mobile_no(mobile_no):
 
 	if errors:
 		frappe.throw(errors[0])
-	return "975"+str(mobile_no)[-8:]
+	return mobile_no
 
 def send_sms(receiver, message, log_msg=''):
 	import requests
-	from erpnext.integrations import SendSMS
-	
-	try:
-		params = {
-			"sender_name": "NRDCL",
-			"to": receiver,
-			"message": message
-		}
-		params = frappe._dict(params)
-		resp = SendSMS('NRDCL', receiver, message)
-		if resp:
-			args = params.update({"log_msg": log_msg, "receiver_list": [receiver]})
-			create_sms_log(args,[receiver])
-	except Exception, e:
-		pass
-
-def send_sms_old(receiver, message, log_msg=''):
-	import requests
 
 	try:
 		params = {
 			"sender_name": "NRDCL",
-			"to": receiver,
+			"to": validate_mobile_no(receiver),
 			"message": message
 		}
 		params = frappe._dict(params)
@@ -806,28 +773,27 @@ def create_sms_log(args, sent_to):
 
 @frappe.whitelist(allow_guest=True)
 def crm_reset_password(login_id, mobile_no):
-	login_id = str(login_id).strip()
-	mobile_no= str(mobile_no).strip()
 	if login_id=="Administrator":
 		return _("Not allowed to reset the password of {0}").format(user)
 
 	try:
 		mobile_no = validate_mobile_no(mobile_no)
-		if frappe.db.exists("User", login_id):
-			user = frappe.db.sql("""select name from `tabUser` where name = '{login_id}'
-				and substr(mobile_no,-8) = '{mobile_no}'""".format(login_id=login_id,mobile_no=mobile_no[-8:]))
-			if user:
-				user = user[0][0]
-			else:
-				frappe.throw(_("Invalid combination of CID and Mobile Number"))
+		if frappe.db.exists("User", login_id.strip()):
+			'''
+			if not frappe.db.sql("""select count(*) from `__PIN` where login_id='{login_id}' 
+				and mobile_no = '{mobile_no}'""".format(login_id=login_id.strip(),mobile_no=mobile_no))[0][0]:
+				frappe.throw("Unauthorized access")
+			'''
+			if not frappe.db.exists("User", {"name": login_id.strip(), "mobile_no": mobile_no.strip()}):
+				frappe.throw(_("Unauthorized access"))
 
-			doc = frappe.get_doc("User", user)
-			send_pin(doc.full_name, doc.login_id, doc.mobile_no, request_type="reset")
+			user = frappe.get_doc("User", {"name": login_id.strip(), "mobile_no": mobile_no.strip()})
+			send_pin(user.full_name, user.login_id, user.mobile_no, request_type="reset")
 			return _("Password reset successful")
 		else:
-			frappe.throw(_("User {0} does not exist!").format(login_id))
+			frappe.throw(_("User {0} does not exist").format(login_id))
 	except frappe.DoesNotExistError:
-		frappe.throw(_("User {0} does not exist!!!").format(login_id))
+		frappe.throw(_("User {0} does not exist").format(login_id))
 # ==============================================================================================================================
 # NRDCLTTPL ENDS
 ###  Version20191117 Ends  ###
