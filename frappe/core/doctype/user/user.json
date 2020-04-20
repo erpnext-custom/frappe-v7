@@ -1,7 +1,8 @@
 {
  "allow_copy": 0, 
  "allow_import": 0, 
- "allow_rename": 0, 
+ "allow_rename": 1, 
+ "autoname": "", 
  "beta": 0, 
  "creation": "2014-03-11 14:55:00", 
  "custom": 0, 
@@ -1571,7 +1572,7 @@
  "istable": 0, 
  "max_attachments": 5, 
  "menu_index": 0, 
- "modified": "2020-03-06 16:37:22.678739", 
+ "modified": "2020-03-25 15:54:58.784073", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "User", 
