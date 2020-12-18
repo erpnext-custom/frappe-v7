@@ -1,7 +1,7 @@
 {
  "allow_copy": 0, 
  "allow_import": 0, 
- "allow_rename": 0, 
+ "allow_rename": 1, 
  "autoname": "field:report_name", 
  "beta": 0, 
  "creation": "2013-03-09 15:45:57", 
@@ -393,10 +393,11 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2020-07-07 14:45:46.557401", 
- "modified_by": "ucdorji@gyalsunginfra.bt", 
+ "modified": "2020-12-18 11:47:57.035926", 
+ "modified_by": "Administrator", 
  "module": "Core", 
  "name": "Report", 
+ "name_case": "Title Case", 
  "owner": "Administrator", 
  "permissions": [
   {
@@ -500,11 +501,11 @@
    "write": 0
   }
  ], 
- "quick_entry": 1, 
+ "quick_entry": 0, 
  "read_only": 0, 
  "read_only_onload": 0, 
  "sort_field": "modified", 
  "sort_order": "DESC", 
- "track_changes": 0, 
- "track_seen": 0
+ "track_changes": 1, 
+ "track_seen": 1
 }
