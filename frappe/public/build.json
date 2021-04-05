@@ -39,6 +39,7 @@
 	],
 	"css/desk.min.css": [
 		"public/js/lib/jquery/bootstrap_theme/jquery-ui.selected.css",
+		"public/js/lib/summernote/summernote.css",
 		"public/css/bootstrap.css",
 		"public/css/font-awesome.css",
 		"public/css/octicons/octicons.css",
@@ -60,6 +61,7 @@
 		"public/js/lib/Sortable.min.js",
 		"public/js/lib/tag-it.min.js",
 		"public/js/lib/notify.js",
+		"public/js/lib/summernote/summernote.js",
 		"public/js/lib/bootstrap.min.js",
 		"public/js/lib/moment/moment-with-locales.min.js",
 		"public/js/lib/moment/moment-timezone-with-data.min.js",
@@ -139,6 +141,7 @@
 		"public/js/frappe/change_log.html",
 		"public/js/frappe/desk.js",
 		"public/js/frappe/query_string.js",
+		"public/js/frappe/ui/comment.js",
 
 		"public/js/frappe/ui/charts.js",
 
