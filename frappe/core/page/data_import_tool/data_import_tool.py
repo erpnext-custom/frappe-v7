@@ -20,7 +20,6 @@ def get_data_keys():
 @frappe.whitelist()
 def get_doctypes():
 	return frappe.get_user()._get("can_import")
-
 @frappe.whitelist()
 def get_doctype_options():
 	doctype = frappe.form_dict['doctype']

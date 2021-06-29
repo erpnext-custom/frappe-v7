@@ -5,13 +5,20 @@
  "doctype": "Page", 
  "icon": "icon-upload", 
  "idx": 1, 
- "modified": "2016-05-11 03:37:53.385693", 
+ "modified": "2021-04-07 11:33:02.211700", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "data-import-tool", 
  "owner": "Administrator", 
  "page_name": "data-import-tool", 
- "roles": [], 
+ "roles": [
+  {
+   "role": "System Manager"
+  }, 
+  {
+   "role": "Stock Manager"
+  }
+ ], 
  "script": null, 
  "standard": "Yes", 
  "style": null, 

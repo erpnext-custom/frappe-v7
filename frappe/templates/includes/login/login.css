@@ -42,7 +42,7 @@
   padding-top: 20px;
   margin: 0 auto;
   border-radius: 5px;
-  background-color: #d6f3df;
+  background-color: #fdeae8;
 }
 .form-signin .form-signin-heading,
 .form-signin .checkbox {
@@ -103,15 +103,15 @@ h5:before {
     text-transform: uppercase;
     letter-spacing: 0.5px;
 	font-weight: 300;
-	height:110px;
-	background: url("http://nhdcl.erp.bt/files/favicon.png") no-repeat center;
+	height:190px;
+	background: url("https://desuung.org.bt/wp-content/uploads/2020/04/cropped-desuungicon-copy-180x180.png") no-repeat center;
 }
 
 p{
 	margin-bottom:20px;
 }
 .btn-login, .btn-signup, .btn-forgot {
-	background: #2d7b3c;
+	background: #d85c14;
 	color: white;
 }
 

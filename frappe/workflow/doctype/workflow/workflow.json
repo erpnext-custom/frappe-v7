@@ -1,6 +1,6 @@
 {
  "allow_copy": 0, 
- "allow_import": 0, 
+ "allow_import": 1, 
  "allow_rename": 0, 
  "autoname": "field:workflow_name", 
  "beta": 0, 
@@ -228,8 +228,8 @@
  "istable": 0, 
  "max_attachments": 0, 
  "menu_index": 0, 
- "modified": "2018-11-13 09:57:00.538257", 
- "modified_by": "Administrator", 
+ "modified": "2021-04-13 12:48:43.257283", 
+ "modified_by": "dechen.lhaden@thimphutechpark.bt", 
  "module": "Workflow", 
  "name": "Workflow", 
  "owner": "Administrator", 
