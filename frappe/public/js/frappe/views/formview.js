@@ -7,6 +7,7 @@ frappe.views.FormFactory = frappe.views.Factory.extend({
 	make: function(route) {
 		var me = this,
 			dt = route[1];
+		if(dt == "Receive POL") { dt = "POL"}
 
 		if(!frappe.views.formview[dt]) {
 			frappe.model.with_doctype(dt, function() {
@@ -49,6 +50,8 @@ frappe.views.FormFactory = frappe.views.Factory.extend({
 		var dt = route[1],
 			dn = route.slice(2).join("/"),
 			me = this;
+
+		if(dt == "Receive POL") { dt = "POL"}
 
 		if(frappe.model.new_names[dn]) {
 			dn = frappe.model.new_names[dn];

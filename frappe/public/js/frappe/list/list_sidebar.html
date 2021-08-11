@@ -26,6 +26,10 @@
     {% if(frappe.help.has_help(doctype)) { %}
     <li><a class="help-link" data-doctype="{{ doctype }}">{{ __("Help") }}</a></li>
     {% } %}
+
+    {% if(frappe.get_meta(doctype).is_submittable) { %}
+             <li><a class="cancel-link">Hide Cancelled Documents</a></li>
+    {% } %}
 </ul>
 
 

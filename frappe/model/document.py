@@ -676,6 +676,8 @@ class Document(BaseDocument):
 	@whitelist.__func__
 	def _submit(self):
 		"""Submit the document. Sets `docstatus` = 1, then saves."""
+		self.submission = now()
+		self.submitted_by = frappe.session.user
 		self.docstatus = 1
 		self.save()
 

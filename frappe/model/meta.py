@@ -367,7 +367,7 @@ def get_field_precision(df, doc=None, currency=None):
 
 def get_default_df(fieldname):
 	if fieldname in default_fields:
-		if fieldname in ("creation", "modified"):
+		if fieldname in ("creation", "modified", "submission"):
 			return frappe._dict(
 				fieldname = fieldname,
 				fieldtype = "Datetime"

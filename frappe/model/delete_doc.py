@@ -165,7 +165,6 @@ def check_if_doc_is_linked(doc, method="Delete"):
 	from frappe.model.rename_doc import get_link_fields
 	link_fields = get_link_fields(doc.doctype)
 	link_fields = [[lf['parent'], lf['fieldname'], lf['issingle']] for lf in link_fields]
-
 	for link_dt, link_field, issingle in link_fields:
 		if not issingle:
 			item = frappe.db.get_value(link_dt, {link_field:doc.name},

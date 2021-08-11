@@ -8,6 +8,7 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import validate_email_add, nowdate
 from frappe.utils.jinja import validate_template
+from frappe.core.doctype.role.role import get_emails_from_role
 
 class EmailAlert(Document):
 	def validate(self):
@@ -92,6 +93,7 @@ def trigger_email_alerts(doc, method=None):
 			"on_update": "Save",
 			"after_insert": "New",
 			"validate": "Value Change",
+			"on_update_after_submit": "Value Change After Submit",
 			"on_submit": "Submit",
 			"on_cancel": "Cancel",
 		}[method]

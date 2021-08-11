@@ -134,6 +134,7 @@ def get_doc_permissions(doc, verbose=False, user=None):
 
 	update_share_permissions(role_permissions, doc, user)
 
+	#frappe.msgprint(role_permissions)
 	return role_permissions
 
 def update_share_permissions(role_permissions, doc, user):

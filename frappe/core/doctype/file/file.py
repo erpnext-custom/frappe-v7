@@ -16,11 +16,12 @@ import requests
 import requests.exceptions
 import StringIO
 import mimetypes, imghdr
+import magic
 
 from frappe.utils.file_manager import delete_file_data_content, get_content_hash, get_random_filename
 from frappe import _
 from frappe.utils.nestedset import NestedSet
-from frappe.utils import strip, get_files_path
+from frappe.utils import strip, get_files_path, get_site_name
 from PIL import Image, ImageOps
 
 class FolderNotEmpty(frappe.ValidationError): pass
@@ -65,6 +66,7 @@ class File(NestedSet):
 		if self.is_new():
 			self.validate_duplicate_entry()
 		self.validate_folder()
+		self.scan_file()
 
 		if not self.flags.ignore_file_validate:
 			self.validate_file()
@@ -115,6 +117,23 @@ class File(NestedSet):
 
 			if not os.path.exists(get_files_path(self.file_name.lstrip("/"))):
 				frappe.throw(_("File {0} does not exist").format(self.file_url), IOError)
+
+	def scan_file(self):
+                if (self.file_url or "").startswith("/files/"):
+                        if not self.file_name:
+                                self.file_name = self.file_url.split("/files/")[-1]
+
+                mime_doc = magic.Magic(mime=True)
+                file_name = str(os.getcwd()) + "/" + str(get_files_path(self.file_name.lstrip("/")))
+                if os.path.isfile(file_name):
+                        file_mim_type = mime_doc.from_file(file_name)
+                else:
+                        file_mim_type = mime_doc.from_file(str(os.getcwd()) + "/" + str(get_site_name(frappe.local.request.host)) + "/private/files/" + str(self.file_name.lstrip("/")))
+                if not file_mim_type:
+                        frappe.throw("Not able to determine file type")
+                #if file_mim_type not in ('text/csv', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/gif', 'image/jpeg', 'image/png', 'application/pdf', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'):
+                if file_mim_type not in ('text/csv', 'image/gif', 'image/jpeg', 'image/png', 'application/pdf'):
+                        frappe.throw("You might be uploading insecure files. Only images, documents, and pdf files are allowed")
 
 	def validate_duplicate_entry(self):
 		if not self.flags.ignore_duplicate_entry_error and not self.is_folder:

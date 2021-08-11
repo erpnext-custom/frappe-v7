@@ -928,7 +928,7 @@ def copy_doc(doc, ignore_no_copy=True):
 			if hasattr(d, df.fieldname):
 				d.set(df.fieldname, None)
 
-	fields_to_clear = ['name', 'owner', 'creation', 'modified', 'modified_by']
+	fields_to_clear = ['name', 'owner', 'creation', 'modified', 'modified_by', 'submission', "submitted_by"]
 
 	if not local.flags.in_test:
 		fields_to_clear.append("docstatus")
@@ -1244,7 +1244,7 @@ def logger(module=None, with_more_info=True):
 	return get_logger(module or __name__, with_more_info=with_more_info)
 
 def get_desk_link(doctype, name):
-	return '<a href="#Form/{0}/{1}" style="font-weight: bold;">{2} {1}</a>'.format(doctype, name, _(doctype))
+	return '<a href="#Form/{0}/{1}" style="font-weight: bold;">{2} ({1})</a>'.format(doctype, name, _(doctype))
 
 def bold(text):
 	return '<b>{0}</b>'.format(text)

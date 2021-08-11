@@ -1,6 +1,6 @@
 {
  "allow_copy": 0, 
- "allow_import": 1, 
+ "allow_import": 0, 
  "allow_rename": 1, 
  "beta": 0, 
  "creation": "2014-03-11 14:55:00", 
@@ -1546,7 +1546,7 @@
  "istable": 0, 
  "max_attachments": 5, 
  "menu_index": 0, 
- "modified": "2017-11-23 19:22:35.440517", 
+ "modified": "2020-05-12 20:04:51.491203", 
  "modified_by": "Administrator", 
  "module": "Core", 
  "name": "User", 
@@ -1554,14 +1554,14 @@
  "permissions": [
   {
    "amend": 0, 
-   "apply_user_permissions": 1, 
+   "apply_user_permissions": 0, 
    "cancel": 0, 
    "create": 1, 
    "delete": 1, 
    "email": 1, 
    "export": 1, 
    "if_owner": 0, 
-   "import": 1, 
+   "import": 0, 
    "permlevel": 0, 
    "print": 1, 
    "read": 1, 

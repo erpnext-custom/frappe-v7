@@ -170,8 +170,8 @@ _f.Frm.prototype.print_doc = function() {
 		return;
 	}
 	if(!frappe.model.can_print(this.doc.doctype, this)) {
-		msgprint(__("You are not allowed to print this document"));
-		return;
+		/**** TEMP SOLUTON TO ALLOW PRINT msgprint(__("You are not allowed to print this document"));
+		return; ****/
 	}
 
 	this.print_preview.refresh_print_options().trigger("change");
@@ -322,6 +322,7 @@ _f.Frm.prototype.rename_notify = function(dt, old, name) {
 // SETUP
 
 _f.Frm.prototype.setup_meta = function(doctype) {
+	if(doctype == "Receive POL") {this.doctype = "POL"}
 	this.meta = frappe.get_doc('DocType',this.doctype);
 	this.perm = frappe.perm.get_perm(this.doctype); // for create
 	if(this.meta.istable) { this.meta.in_dialog = 1 }
