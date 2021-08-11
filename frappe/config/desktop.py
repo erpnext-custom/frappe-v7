@@ -35,6 +35,7 @@ def get_data():
 			"icon": "octicon octicon-settings",
 			"type": "module",
 			"hidden": 1
+			
 		},
 		{
 			"module_name": "Core",

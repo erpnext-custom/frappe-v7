@@ -8,7 +8,7 @@ from frappe.utils import cstr
 from frappe.model import default_fields
 
 def get_mapped_doc(from_doctype, from_docname, table_maps, target_doc=None,
-		postprocess=None, ignore_permissions=False, ignore_child_tables=False):
+		postprocess=None, ignore_permissions=False, ignore_child_tables=False, dont_copy=None):
 
 	source_doc = frappe.get_doc(from_doctype, from_docname)
 
@@ -25,7 +25,7 @@ def get_mapped_doc(from_doctype, from_docname, table_maps, target_doc=None,
 	if not ignore_permissions and not target_doc.has_permission("create"):
 		target_doc.raise_no_permission_to("create")
 
-	map_doc(source_doc, target_doc, table_maps[source_doc.doctype])
+	map_doc(source_doc, target_doc, table_maps[source_doc.doctype], dont_copy=dont_copy)
 
 	row_exists_for_parentfield = {}
 
@@ -74,7 +74,7 @@ def get_mapped_doc(from_doctype, from_docname, table_maps, target_doc=None,
 	target_doc.set_onload("load_after_mapping", True)
 	return target_doc
 
-def map_doc(source_doc, target_doc, table_map, source_parent=None):
+def map_doc(source_doc, target_doc, table_map, source_parent=None, dont_copy=None):
 	if table_map.get("validation"):
 		for key, condition in table_map["validation"].items():
 			if condition[0]=="=":
@@ -82,16 +82,19 @@ def map_doc(source_doc, target_doc, table_map, source_parent=None):
 					frappe.throw(_("Cannot map because following condition fails: ")
 						+ key + "=" + cstr(condition[1]))
 
-	map_fields(source_doc, target_doc, table_map, source_parent)
+	map_fields(source_doc, target_doc, table_map, source_parent, dont_copy)
 
 	if "postprocess" in table_map:
 		table_map["postprocess"](source_doc, target_doc, source_parent)
 
-def map_fields(source_doc, target_doc, table_map, source_parent):
+def map_fields(source_doc, target_doc, table_map, source_parent, dont_copy=None):
+	if not dont_copy:
+                dont_copy = []
 	no_copy_fields = set([d.fieldname for d in source_doc.meta.get("fields") if (d.no_copy==1 or d.fieldtype=="Table")]
 		+ [d.fieldname for d in target_doc.meta.get("fields") if (d.no_copy==1 or d.fieldtype=="Table")]
 		+ list(default_fields)
-		+ list(table_map.get("field_no_map", [])))
+		+ list(table_map.get("field_no_map", []))
+		+ dont_copy)
 
 	for df in target_doc.meta.get("fields"):
 		if df.fieldname not in no_copy_fields:

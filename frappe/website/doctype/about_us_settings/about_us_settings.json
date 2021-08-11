@@ -246,8 +246,8 @@
  "issingle": 1, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2017-09-01 14:14:07.406455", 
- "modified_by": "Administrator", 
+ "modified": "2018-12-29 10:04:50.596877", 
+ "modified_by": "gyenzin@cdcl.bt", 
  "module": "Website", 
  "name": "About Us Settings", 
  "owner": "Administrator", 
@@ -297,5 +297,6 @@
  "read_only": 0, 
  "read_only_onload": 0, 
  "sort_order": "ASC", 
+ "track_changes": 0, 
  "track_seen": 0
 }

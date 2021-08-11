@@ -1,7 +1,7 @@
 <div class="module-body">
 {% for (var i=0; i < data.length; i++) { var section = data[i]; %}
 {% if ((i % 3)===0) { %}<div class="row module-section">{% } %}
-	<div class="col-sm-4 module-section-column">
+	<div class="col-sm-6 module-section-column">
 		<div class="h4 section-head">
 			{{ section.label }}
 		</div>
@@ -13,9 +13,7 @@
 					<a class="module-section-link small" data-type="{{ item.type }}"
 						{% if(item.type==="help") { %}
 							data-youtube-id="{{ item.youtube_id }}"{% } %}
-						href="#{{ item.route }}" 
-						{% if(item.type==="report"){ var color = "#04A15C"; } else { var color = ""; } %}
-							style="color:{{ color }}">
+						href="#{{ item.route }}" style="{{ item.style }}">
 						{{ item.label || __(item.name) }}
 					</a>
 					{% if(item.type==="doctype") { %}

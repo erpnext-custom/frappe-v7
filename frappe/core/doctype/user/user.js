@@ -91,7 +91,7 @@ frappe.ui.form.on('User', {
 			frm.set_df_property('enabled', 'read_only', 0);
 		}
 
-		if(user!="Administrator") {
+	if(!has_common(user_roles, ["Administrator", "Admin"])) {
 			frm.toggle_enable('email', doc.__islocal);
 		}
 	}

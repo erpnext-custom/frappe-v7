@@ -618,7 +618,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 20, 
- "modified": "2018-03-26 15:36:22.106889", 
+ "modified": "2019-05-27 12:35:55.405884", 
  "modified_by": "Administrator", 
  "module": "Website", 
  "name": "Web Page", 
@@ -646,7 +646,7 @@
   }, 
   {
    "amend": 0, 
-   "apply_user_permissions": 1, 
+   "apply_user_permissions": 0, 
    "cancel": 0, 
    "create": 1, 
    "delete": 0, 
@@ -662,7 +662,6 @@
    "set_user_permissions": 0, 
    "share": 1, 
    "submit": 0, 
-   "user_permission_doctypes": "[\"Web Page\"]", 
    "write": 1
   }, 
   {

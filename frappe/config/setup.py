@@ -236,7 +236,7 @@ def get_data():
 					"type": "doctype",
 					"name": "Customize Form",
 					"description": _("Change field properties (hide, readonly, permission etc.)"),
-					"hide_count": True
+					"hide_count":True
 				},
 				{
 					"type": "doctype",
