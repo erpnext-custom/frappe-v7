@@ -12,6 +12,6 @@
     	<span class="list-comment-count small
 			{% if(!data._comment_count) { %} text-extra-muted {% } else { %} text-muted {% } %}">
     		<i class="octicon octicon-comment-discussion"></i>
-                {%= (data._comment_count > 99 ? "99+" : data._comment_count) || 0 %}
+                {%= (data._comment_count > 999 ? "999+" : data._comment_count) || 0 %}
         </span>
 </div>

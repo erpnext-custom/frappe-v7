@@ -194,6 +194,23 @@ frappe.ui.form.Toolbar = Class.extend({
                         }, true)
                 }
 
+                if(cint(me.frm.doc.docstatus) == 0 && is_submittable) {
+                        this.page.add_menu_item(__('Cancel Document'), function() {
+                                frappe.confirm("Do you really want to <b>Cancel</b> this document?", function() {
+                                        frappe.call({
+                                                method: "frappe.custom_utils.cancel_draft_doc",
+                                                args: {
+                                                        "doctype": me.frm.doctype,
+                                                        "docname": me.frm.docname
+                                                },
+                                                callback: function(r) {
+                                                        me.frm.reload_doc()
+                                                }
+                                        })
+                                });
+                        }, true)
+                }
+
 	},
 	can_save: function() {
 		return this.get_docstatus()===0;
