@@ -355,7 +355,7 @@ class User(Document):
 	def validate_email_type(self, email):
 		### Version20191115.0 Begins ###
 		# Following code added by SHIV on 2019/11/15
-		if not self.email:
+		if not self.email or self.account_type == 'CRM':
 			return
 		###  Version20191115.0 Ends  ###
 		from frappe.utils import validate_email_add
@@ -646,8 +646,8 @@ def crm_sign_up(full_name, login_id, mobile_no, alternate_mobile_no, email, pin)
 		else:
 			frappe.throw("User {0} Already Registered".format(login_id))
 	else:
-		if not frappe.db.sql("""select count(*) from `__PIN` where login_id='{login_id}' 
-			and pin = password(concat('{pin}',salt))""".format(login_id=login_id,pin=pin))[0][0]:
+		if not frappe.db.sql("""select count(*) from `__PIN` where login_id= %(login_id)s 
+			and pin = password(concat(%(pin)s,salt))""", {'login_id':login_id, 'pin':pin})[0][0]:
 			frappe.throw("Invalid CID Number or PIN")
 		
 		'''	
@@ -690,13 +690,49 @@ def create_pin(full_name, login_id, mobile_no):
 	login_id  = str(login_id).strip()
 	mobile_no = validate_mobile_no(mobile_no)
 	pin = random.randint(1000,9999)
+        min_per_request = 60
 
-	frappe.db.sql("""insert into __PIN (full_name,login_id,mobile_no,pin,salt,owner,creation)
-		values (%(full_name)s, %(login_id)s, %(mobile_no)s, password(concat(%(pin)s, %(salt)s)), %(salt)s, %(full_name)s,now())
+        req = frappe.db.sql("""select ifnull(modified,creation) last_request,
+                        timestampdiff(MINUTE,ifnull(modified,creation),NOW()) as minutes_since_last,
+                        DATE_ADD(ifnull(modified,creation), INTERVAL {} MINUTE) next_request
+                from `__PIN`
+                where login_id = %(login_id)s and mobile_no = %(mobile_no)s
+                """.format(min_per_request),{'login_id': login_id, 'mobile_no': mobile_no[-8:]}, as_dict=True)
+
+        if req and flt(req[0].minutes_since_last) < flt(min_per_request):
+                frappe.throw(_("Only one request per {} minute(s) permitted. Please try again after {}").format(min_per_request,req[0].next_request))
+        
+	frappe.db.sql("""insert into __PIN (full_name,login_id,mobile_no,pin,salt,owner,creation,modified)
+		values (%(full_name)s, %(login_id)s, %(mobile_no)s, password(concat(%(pin)s, %(salt)s)), %(salt)s, %(full_name)s,now(),now())
 		on duplicate key update
-			pin=password(concat(%(pin)s, %(salt)s)), salt=%(salt)s""",
+			pin=password(concat(%(pin)s, %(salt)s)), salt=%(salt)s, modified=now()""",
 		{ 'full_name': full_name, 'login_id': login_id, 'mobile_no': str(mobile_no)[-8:], 'pin': pin, 'salt': salt })
+	print(pin)
 	return pin
+
+def update_mobile_no(full_name, login_id, mobile_no):
+	pin 	  = None
+	message   = ""
+	log_msg   = ""
+	login_id  = str(login_id).strip()
+	mobile_no = validate_mobile_no(mobile_no)
+
+	if frappe.db.exists("User", login_id):
+		pin = create_pin(full_name, login_id, mobile_no)
+		user = frappe.get_doc("User", login_id)
+		user.mobile_no = mobile_no
+		user.new_password = pin
+		user.save(ignore_permissions=True)
+		message = "Dear "+user.full_name+", your PIN is reset to {0} for login id {1}".format(pin,login_id)
+		log_msg = "Dear "+user.full_name+", your PIN is reset to {0} for login id {1}".format(len(str(pin))*"*",login_id)
+
+		if pin:
+			try:
+				send_sms(mobile_no, message, log_msg)
+			except Exception, e:
+				frappe.throw("Unable to send SMS. {}".format(str(e)))				
+		else:
+			frappe.throw("Something went wrong. Please contact administrator")
 
 @frappe.whitelist(allow_guest=True)
 def send_pin(full_name, login_id, mobile_no, request_type="signup"):
@@ -776,22 +812,6 @@ def send_sms(receiver, message, log_msg=''):
 	except Exception, e:
 		pass
 
-def send_sms_old(receiver, message, log_msg=''):
-	import requests
-
-	try:
-		params = {
-			"sender_name": "NRDCL",
-			"to": receiver,
-			"message": message
-		}
-		params = frappe._dict(params)
-		resp = requests.get("http://fleet.bt/smsapi/sendsms.php?sender={sender_name}&message={message}&to={to}".format(**params),timeout=1)
-		args = params.update({"log_msg": log_msg, "receiver_list": [receiver]})
-		create_sms_log(args,[receiver])
-	except Exception, e:
-		frappe.throw(str(e))
-		
 def create_sms_log(args, sent_to):
 	sl = frappe.new_doc('SMS Log')
 	sl.sender_name = args['sender_name']
@@ -814,8 +834,8 @@ def crm_reset_password(login_id, mobile_no):
 	try:
 		mobile_no = validate_mobile_no(mobile_no)
 		if frappe.db.exists("User", login_id):
-			user = frappe.db.sql("""select name from `tabUser` where name = '{login_id}'
-				and substr(mobile_no,-8) = '{mobile_no}'""".format(login_id=login_id,mobile_no=mobile_no[-8:]))
+			user = frappe.db.sql("""select name from `tabUser` where name = %(login_id)s
+				and substr(mobile_no,-8) = %(mobile_no)s""",{'login_id':login_id,'mobile_no':mobile_no[-8:]})
 			if user:
 				user = user[0][0]
 			else:

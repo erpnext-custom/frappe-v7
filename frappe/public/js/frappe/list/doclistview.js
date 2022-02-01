@@ -438,6 +438,27 @@ frappe.views.DocListView = frappe.ui.Listing.extend({
 		this.filter_list.add_filter(this.doctype, "owner", '=', user);
 		this.run();
 	},
+	pending_approval: function() {
+		var fieldname = "";
+		this.meta = locals.DocType[this.doctype];
+		for(i in this.meta.fields)
+		{
+			if("leave_approver" == this.meta.fields[i].fieldname){
+				fieldname = this.meta.fields[i].fieldname;
+			}
+			else if("supervisor" == this.meta.fields[i].fieldname){
+				fieldname = this.meta.fields[i].fieldname;
+			}
+			else if("advance_approver" == this.meta.fields[i].fieldname){
+				fieldname = this.meta.fields[i].fieldname;
+			}
+			else if("approver" == this.meta.fields[i].fieldname){
+				fieldname = this.meta.fields[i].fieldname;
+			}
+		}
+		this.filter_list.add_filter(this.doctype, fieldname, '=', user);
+		this.run();
+	},
 	liked_by_me: function() {
 		this.filter_list.add_filter(this.doctype, "_liked_by", '=', user);
 		this.run();

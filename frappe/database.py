@@ -223,7 +223,7 @@ class Database:
 
 		if query[:6].lower() in ('update', 'insert', 'delete'):
 			self.transaction_writes += 1
-			if self.transaction_writes > 200000:
+			if self.transaction_writes > 2000000:
 				if self.auto_commit_on_many_writes:
 					frappe.db.commit()
 				else:

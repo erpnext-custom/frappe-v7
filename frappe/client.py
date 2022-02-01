@@ -30,7 +30,7 @@ def get(doctype, name=None, filters=None):
 @frappe.whitelist()
 def get_value(doctype, fieldname, filters=None, as_dict=True, debug=False):
 	if not frappe.has_permission(doctype):
-		frappe.throw(_("Not permitted"), frappe.PermissionError)
+		frappe.throw(_("Not permitted = {}").format(doctype), frappe.PermissionError)
 
 	try:
 		filters = json.loads(filters)

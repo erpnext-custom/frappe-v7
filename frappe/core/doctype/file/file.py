@@ -119,12 +119,22 @@ class File(NestedSet):
 				frappe.throw(_("File {0} does not exist").format(self.file_url), IOError)
 
 	def scan_file(self):
+		if frappe.session.user == "Administrator":
+			frappe.msgprint("file.py self.file_url: {}".format(self.file_url))
+			frappe.msgprint("file.py self.file_name: {}".format(self.file_name))
+			frappe.msgprint("file.py get_files_path(): {}".format(get_files_path(self.file_name.lstrip("/"))))
                 if (self.file_url or "").startswith("/files/"):
                         if not self.file_name:
                                 self.file_name = self.file_url.split("/files/")[-1]
                 
                 mime_doc = magic.Magic(mime=True)
                 file_name = str(os.getcwd()) + "/" + str(get_files_path(self.file_name.lstrip("/")))
+		if frappe.session.user == "Administrator":
+			frappe.msgprint("file.py self.file_url: {}".format(self.file_url))
+			frappe.msgprint("file.py self.file_name: {}".format(self.file_name))
+			frappe.msgprint("file.py os.getcwd(): {}".format(os.getcwd()))
+			frappe.msgprint("file.py get_files_path(): {}".format(get_files_path(self.file_name.lstrip("/"))))
+			frappe.msgprint("file.py: {}".format(file_name))
                 if os.path.isfile(file_name):
                         file_mim_type = mime_doc.from_file(file_name)
                 else:

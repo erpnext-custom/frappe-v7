@@ -17,7 +17,7 @@ frappe.views.ListSidebar = Class.extend({
 	},
 	make: function() {
 		var sidebar_content = frappe.render_template("list_sidebar", {doctype: this.doclistview.doctype});
-
+		var me = this;
 		this.sidebar = $('<div class="list-sidebar overlay-sidebar hidden-xs hidden-sm"></div>')
 			.html(sidebar_content)
 			.appendTo(this.page.sidebar.empty());
@@ -26,7 +26,18 @@ frappe.views.ListSidebar = Class.extend({
 		this.setup_assigned_to_me();
 		this.setup_created_by_me();
 		this.setup_list_view_switching();
-
+		var meta = frappe.get_meta(me.doclistview.doctype);
+		var count = 0
+		for(i in meta.fields){
+			if("leave_approver" == meta.fields[i].fieldname || "supervisor" == meta.fields[i].fieldname || "advance_approver" == meta.fields[i].fieldname || "approver" == meta.fields[i].fieldname){
+				console.log("HERE")
+				this.setup_pending_approval();
+				count+=1;
+			}
+		}
+		if(count==0){
+			this.sidebar.find(".pending-approval a").addClass("hide");
+		}
 		if(frappe.views.calendar[this.doctype]) {
 			this.sidebar.find(".calendar-link, .gantt-link").removeClass("hide");
 		}
@@ -94,7 +105,13 @@ frappe.views.ListSidebar = Class.extend({
                 this.page.sidebar.find(".created-by-me a").on("click", function() {
                         me.doclistview.created_by_me();
                 });
-        },
+		},
+	setup_pending_approval: function() {
+			var me = this;
+					this.page.sidebar.find(".pending-approval a").on("click", function() {
+						me.doclistview.pending_approval();
+					});
+	},
 	setup_list_view_switching: function() {
 		var me = this;
 		if(this.doclistview.meta.image_field) {
