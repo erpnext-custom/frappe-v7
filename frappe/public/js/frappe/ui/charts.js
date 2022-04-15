@@ -2,12 +2,14 @@ frappe.provide("frappe.ui");
 
 frappe.ui.Chart = Class.extend({
 	init: function(opts) {
+		console.log("fgasdgds")
 		this.opts = {};
 		$.extend(this.opts, opts);
 		this.show_chart(false);
 
 		if(this.opts.data && ((this.opts.data.columns && this.opts.data.columns.length >= 1)
 			|| (this.opts.data.rows && this.opts.data.rows.length >= 1))) {
+				console.log("here")
 				this.chart = this.render_chart();
 				this.show_chart(true);
 		}

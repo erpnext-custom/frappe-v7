@@ -94,6 +94,20 @@ frappe.ui.form.on('User', {
 	if(!has_common(user_roles, ["Administrator", "Admin"])) {
 			frm.toggle_enable('email', doc.__islocal);
 		}
+	},
+	//# ADDED BY KINLEY TTPLNRDCL
+	generate_keys: function(frm){
+		frappe.call({
+				method: 'frappe.core.doctype.user.user.generate_keys',
+				args: {
+						user: frm.doc.name
+				},
+				callback: function(r){
+						if(r.message){
+								frappe.msgprint(__("Save API Secret: ") + r.message.api_secret);
+						}
+				}
+		})
 	}
 })
 

@@ -122,3 +122,31 @@ def handle():
 		raise frappe.DoesNotExistError
 
 	return build_response("json")
+
+#By Biren
+def validate_auth_via_api_keys():
+	"""
+	authentication using api key and api secret
+	set user
+	"""
+	try:
+		authorization_header = frappe.get_request_header("Authorization", None).split(" ") if frappe.get_request_header("Authorization") else None
+		if authorization_header and authorization_header[0] == 'token':
+			token = authorization_header[1].split(":")
+			validate_api_key_secret(token[0], token[1])
+	except Exception as e:
+		raise e
+
+def validate_api_key_secret(api_key, api_secret):
+	user = frappe.db.get_value(
+		doctype="User",
+		filters={"api_key": api_key},
+		fieldname=['name']
+	)
+	form_dict = frappe.local.form_dict
+	#user_secret = frappe.utils.password.get_decrypted_password("User", user, fieldname='api_secret')
+	user_secret = frappe.db.get_value("User", user, "api_secret")
+	if api_secret == user_secret:
+		frappe.set_user(user)
+		frappe.local.form_dict = form_dict
+#END
