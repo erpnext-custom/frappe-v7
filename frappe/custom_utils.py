@@ -6,6 +6,10 @@ import frappe
 ##
 @frappe.whitelist()
 def cancel_draft_doc(doctype, docname):
+
+        if doctype == "Leave Application":
+                frappe.throw("Cannot cancel the document once you have applied")
+                
         # Updating Master table docstatus to 2
         doc = frappe.get_doc(doctype, docname)
         doc.db_set("docstatus", 2)
@@ -17,13 +21,15 @@ def cancel_draft_doc(doctype, docname):
                         for df in meta.get_table_fields():
                                 frappe.db.sql("""update `tab{0}` set docstatus=2 where parent='{1}'""".format(df.options,docname))
 
-        if frappe.db.exists("Workflow", doctype):
-                wfs = frappe.db.get_values("Workflow Document State", {"parent":doctype, "doc_status": 2}, "state", as_dict=True)
-                doc.db_set("workflow_state", wfs[0].state if len(wfs) == 1 else "Cancelled")
-	
+	if frappe.db.exists("Workflow", {"document_type":doctype, "is_active":1}):
+		wfs = frappe.db.get_values("Workflow Document State", {"parent":doctype, "doc_status": 2}, "state", as_dict=True)
+		doc.db_set("workflow_state", wfs[0].state if len(wfs) == 1 else "Cancelled")
 
         if doctype == "Material Request":
 		doc.db_set("status", "Cancelled")
+
+        # elif doctype == "Leave Application":
+
 	elif doctype == "Travel Claim":
 		if doc.ta:
 			ta = frappe.get_doc("Travel Authorization", doc.ta)

@@ -35,7 +35,6 @@ def getdate(string_date=None):
 	# dateutil parser does not agree with dates like 0000-00-00
 	if not string_date or string_date=="0000-00-00":
 		return None
-
 	return parser.parse(string_date).date()
 
 def get_datetime(datetime_str=None):
@@ -139,7 +138,7 @@ def now():
 	"""return current datetime as yyyy-mm-dd hh:mm:ss"""
 	if frappe.flags.current_date:
 		return getdate(frappe.flags.current_date).strftime(DATE_FORMAT) + " " + \
-			now_datetime().strftime(TIME_FORMAT)
+		now_datetime().strftime(TIME_FORMAT)
 	else:
 		return now_datetime().strftime(DATETIME_FORMAT)
 
