@@ -1,9 +1,7 @@
 {% extends "templates/web.html" %}
 
 {% block style %}
-<style>
-	{% include "templates/includes/login/crm.css" %}
-</style>
+	<link type="text/css" rel="stylesheet" href="/assets/frappe/css/crm.css">
 {% endblock %}
 
 {% block page_content %}
@@ -105,7 +103,7 @@
 {% endblock %}
 
 {% block script %}
-	<script>{% include "templates/includes/login/crm.js" %}</script>
+<script type="text/javascript" src="/assets/frappe/js/frappe/crm.js"></script>
 {% endblock %}
 
 {% block sidebar %}{% endblock %}

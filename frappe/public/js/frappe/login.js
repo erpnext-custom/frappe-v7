@@ -1,7 +1,7 @@
 // login.js
 // don't remove this line (used in test)
 
-window.disable_signup = {{ disable_signup and "true" or "false" }};
+window.disable_signup = "true";
 
 window.login = {};
 
@@ -28,42 +28,11 @@ login.bind_events = function() {
 	$(".form-signup").on("submit", function(event) {
 		event.preventDefault();
 		var args = {};
-		args.cmd = "frappe.core.doctype.user.user.crm_sign_up";
-		args.full_name = ($("#signup_fullname").val() || "").trim();
-		args.login_id = ($("#signup_login_id").val() || "").trim();
-		args.mobile_no = ($("#signup_mobile_no").val() || "").trim();
-		args.alternate_mobile_no = ($("#signup_alternate_mobile_no").val() || "").trim();
+		args.cmd = "frappe.core.doctype.user.user.sign_up";
 		args.email = ($("#signup_email").val() || "").trim();
-		args.pin = ($("#signup_pin").val() || "").trim();
-		if(!args.full_name) {
-			frappe.msgprint(__("Valid name required"));
-			return false;
-		} else if(!args.login_id) {
-			frappe.msgprint(__("Valid CID/LicenseNo name required"));
-			return false;
-		} else if(!args.mobile_no) {
-			frappe.msgprint(__("Valid mobile number required"));
-			return false;
-		} else if(args.email && !valid_email(args.email)) {
-			frappe.msgprint(__("Valid email required"));
-			return false;
-		} else if(!args.pin) {
-			frappe.msgprint(__("Valid PIN required. If you do not have one, please click on <b>Get your PIN</b> below."));
-			return false;
-		}
-		login.call(args);
-		return false;
-	});
-
-	$(".btn-pin").click(function(){
-		event.preventDefault();
-		var args = {};
-		args.cmd = "frappe.core.doctype.user.user.send_pin";
-		args.full_name  = ($("#signup_fullname").val() || "").trim();
-		args.login_id  = ($("#signup_login_id").val() || "").trim();
-		args.mobile_no = ($("#signup_mobile_no").val() || "").trim();
-		if(!args.full_name || !args.login_id || !args.mobile_no) {
-			frappe.msgprint(__("Valid Full Name,CID/LicenseNo and Mobile Number required"));
+		args.full_name = ($("#signup_fullname").val() || "").trim();
+		if(!args.email || !valid_email(args.email) || !args.full_name) {
+			frappe.msgprint(__("Valid email and name required"));
 			return false;
 		}
 		login.call(args);
@@ -73,11 +42,10 @@ login.bind_events = function() {
 	$(".form-forgot").on("submit", function(event) {
 		event.preventDefault();
 		var args = {};
-		args.cmd = "frappe.core.doctype.user.user.crm_reset_password";
-		args.login_id = ($("#forgot_login_id").val() || "").trim();
-		args.mobile_no = ($("#forgot_mobile_no").val() || "").trim();
-		if(!args.login_id || !args.mobile_no) {
-			frappe.msgprint(__("Valid CID/LincenseNo and Mobile Number required."));
+		args.cmd = "frappe.core.doctype.user.user.reset_password";
+		args.user = ($("#forgot_email").val() || "").trim();
+		if(!args.user) {
+			frappe.msgprint(__("Valid Login id required."));
 			return false;
 		}
 		login.call(args);
