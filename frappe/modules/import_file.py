@@ -48,11 +48,11 @@ def import_file_by_path(path, force=False, data_import=False, pre_process=None):
 				if db_modified and doc.get('modified')==get_datetime_str(db_modified):
 					return False
 				else:
-					if doc['doctype'] == "DocType" and not doc['istable']:
+					if doc.get('doctype') == "DocType" and not doc.get('istable'):
 						try:
-							frappe.permissions.reset_perms(doc['name'])
+							frappe.permissions.reset_perms(doc.get('name'))
 						except:
-							print doc['name']
+							print doc.get('name')
 
 			original_modified = doc.get("modified")
 
@@ -60,13 +60,13 @@ def import_file_by_path(path, force=False, data_import=False, pre_process=None):
 
 			if original_modified:
 				# since there is a new timestamp on the file, update timestamp in
-				if doc["doctype"] == doc["name"] and doc["name"]!="DocType":
+				if doc.get("doctype") == doc.get("name") and doc.get("name")!="DocType":
 					frappe.db.sql("""update tabSingles set value=%s where field="modified" and doctype=%s""",
-						(original_modified, doc["name"]))
+						(original_modified, doc.get("name")))
 				else:
 					frappe.db.sql("update `tab%s` set modified=%s where name=%s" % \
-						(doc['doctype'], '%s', '%s'),
-						(original_modified, doc['name']))
+						(doc.get('doctype'), '%s', '%s'),
+						(original_modified, doc.get('name')))
 
 	frappe.flags.in_import = False
 	return True
