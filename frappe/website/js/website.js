@@ -207,8 +207,7 @@ $.extend(frappe, {
 		});
 	},
 	render_user: function() {
-		var sid = frappe.get_cookie("sid");
-		if(sid && sid!=="Guest") {
+		if(frappe.is_user_logged_in()){
 			$(".btn-login-area").toggle(false);
 			$(".logged-in").toggle(true);
 			$(".full-name").html(frappe.get_cookie("full_name"));
@@ -324,7 +323,7 @@ $.extend(frappe, {
 		return $(".navbar .search, .sidebar .search");
 	},
 	is_user_logged_in: function() {
-		return window.full_name ? true : false;
+		return frappe.session.user !== "Guest";
 	}
 });
 
