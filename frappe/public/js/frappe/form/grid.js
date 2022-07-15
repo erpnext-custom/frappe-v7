@@ -468,8 +468,11 @@ frappe.ui.form.Grid = Class.extend({
 								}
 							}
 						});
-
 						me.frm.refresh_field(me.df.fieldname);
+						//work of Tashi Dorji
+						if(me.frm.doctype == 'Stock Entry') {     
+                                                        me.frm.trigger('pull_item_details');
+                                		}
 						frappe.msgprint({message:__('Table updated'), title:__('Success'), indicator:'green'})
 
 					}, __("Edit via Upload"), __("Update"));
