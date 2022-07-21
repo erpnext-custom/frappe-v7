@@ -207,12 +207,12 @@ $.extend(frappe, {
 		});
 	},
 	render_user: function() {
-		if(frappe.is_user_logged_in()){
+		var sid = frappe.get_cookie("sid");
+		if(sid && sid!=="Guest") {
 			$(".btn-login-area").toggle(false);
 			$(".logged-in").toggle(true);
 			$(".full-name").html(frappe.get_cookie("full_name"));
 			$(".user-image").attr("src", frappe.get_cookie("user_image"));
-
 			$('.user-image-wrapper').html(frappe.avatar(null, 'avatar-small'));
 			$('.user-image-sidebar').html(frappe.avatar(null, 'avatar-small'));
 			$('.user-image-myaccount').html(frappe.avatar(null, 'avatar-large'));
@@ -323,7 +323,7 @@ $.extend(frappe, {
 		return $(".navbar .search, .sidebar .search");
 	},
 	is_user_logged_in: function() {
-		return frappe.session.user !== "Guest";
+		return window.full_name ? true : false;
 	}
 });
 
