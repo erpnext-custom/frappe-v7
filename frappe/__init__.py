@@ -14,6 +14,7 @@ from .exceptions import *
 from .utils.jinja import get_jenv, get_template, render_template
 
 __version__ = "7.0.30"
+__title__ = "Frappe Framework"
 
 local = Local()
 
@@ -136,6 +137,7 @@ def init(site, sites_path=None, new_site=False):
 	local.jenv = None
 	local.jloader =None
 	local.cache = {}
+	local.meta_cache = {}
 
 	setup_module_map()
 
