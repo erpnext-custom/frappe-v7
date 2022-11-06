@@ -52,11 +52,18 @@ def application(request):
 		init_request(request)
 
 		if frappe.local.form_dict.cmd:
+			# temporary block added by SHIV on 2022/11/06
+			spl_chars = ''.join(l for l in str(frappe.local.form_dict.cmd) if not l.isalnum())
+			for al in ('.','-','_',' '):
+				spl_chars = spl_chars.replace(al,"")
+			if len(spl_chars):
+				raise NotFound
+			# temporary block
 			response = frappe.handler.handle()
 
 		elif frappe.request.path.startswith("/api/"):
-                	if frappe.local.form_dict.data is None:
-                        	frappe.local.form_dict.data = request.get_data()
+			if frappe.local.form_dict.data is None:
+				frappe.local.form_dict.data = request.get_data()
 			response = frappe.api.handle()
 
 		elif frappe.request.path.startswith('/backups'):
@@ -66,8 +73,12 @@ def application(request):
 			response = frappe.utils.response.download_private_file(request.path)
 
 		elif frappe.local.request.method in ('GET', 'HEAD'):
+			# temporarily added by SHIV on 2022/11/06
+			for temp in ['contact', 'discussion', 'service', 'address', 'blog']:
+				if temp in frappe.request.path:
+					raise NotFound
+			# temporary block ends
 			response = frappe.website.render.render()
-
 		else:
 			raise NotFound
 
