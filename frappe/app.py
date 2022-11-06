@@ -54,7 +54,7 @@ def application(request):
 		if frappe.local.form_dict.cmd:
 			# temporary block added by SHIV on 2022/11/06
 			spl_chars = ''.join(l for l in str(frappe.local.form_dict.cmd) if not l.isalnum())
-			for al in ('.','-','_',' '):
+			for al in ('.','-','_',' ','&','(',')'):
 				spl_chars = spl_chars.replace(al,"")
 			if len(spl_chars):
 				raise NotFound
